@@ -19,6 +19,20 @@ const Votes = ({ votes, selected }) => {
   )
 }
 
+const TopVoted = ({ votes, anecdotes }) => {
+  const topAnecdote = Math.max(...votes)
+  const index = (votes.indexOf(topAnecdote))
+
+  console.log('Top voted anecdote index:', index)
+
+  return(
+    <>
+    {anecdotes[index]}
+    <p>has {votes[index]} votes</p>
+    </>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -36,6 +50,8 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(initVotes)
 
+  console.log('Voting scoreboard:', votes)
+
   const handleVoteClick = () => {
     const copyVotes = [...votes]
     copyVotes[selected] += 1
@@ -44,11 +60,16 @@ const App = () => {
 
   return (
     <div>
+    <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
     <Votes votes={votes} selected={selected}/>
     <div>
     <Button onClick={handleVoteClick} text="vote" />
-    <Button onClick={() => setSelected(getRandomInt(anecdotes.length))} text="next anecdote" />
+    <Button onClick={() => setSelected(getRandomInt(anecdotes.length))} text="next anecdote"/>
+    </div>
+    <div>
+    <h1>Anecdote with most votes</h1>
+    <TopVoted votes={votes} anecdotes={anecdotes} />
     </div>
     </div>
 
