@@ -7,10 +7,10 @@ const App = () => {
         <h1>{course.name}</h1>
         )
       }
-    const Content = () => {
+    const Content = ({ parts }) => {
       return(
         <div>
-            {course.parts.map(part =>
+            {parts.map(part =>
               <Part key={part.id} name={part.name} exercises={part.exercises}/>
             )}
         </div>
@@ -23,8 +23,8 @@ const App = () => {
      </>
       )
     }
-    const Totals = () => {
-      const total = course.parts.reduce((accumulator, currentValue) => accumulator + currentValue.exercises, 0)
+    const Totals = ({ parts }) => {
+      const total = parts.reduce((accumulator, currentValue) => accumulator + currentValue.exercises, 0)
       return(
         <b>
         total of {total} exercises
@@ -34,9 +34,9 @@ const App = () => {
 
     return (
       <div>
-        <Headers  />
-        <Content  />
-        <Totals />
+        <Headers />
+        <Content parts={course.parts} />
+        <Totals parts={course.parts} />
       </div>
     )
   }
