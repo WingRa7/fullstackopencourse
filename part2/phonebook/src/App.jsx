@@ -5,20 +5,23 @@ const App = ({ directory }) => {
 
   const [persons, setPersons] = useState(directory) 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addName = (event) => {
     
     event.preventDefault()
     const nameObject = {
-      name: newName
+      name: newName,
+      number: newNumber
     }
 
-    const checkDuplicate = (person) => person.name.toLowerCase() === newName.toLowerCase()
-    const duplicate = persons.some(checkDuplicate)
+    const checkDuplicateName = (person) => person.name.toLowerCase() === newName.toLowerCase()
+    const duplicateName = persons.some(checkDuplicateName)
 
-    if (duplicate === false) {
+    if (duplicateName === false) {
     setPersons(persons.concat(nameObject))
     setNewName('')
+    setNewNumber('')
     }
     else
     {
@@ -26,17 +29,19 @@ const App = ({ directory }) => {
     }
   }
   
-  const handleEntryChange = (event) => {
+  const handleNameEntryChange = (event) => {
     setNewName(event.target.value)
+  }
+  const handleNumberEntryChange = (event) => {
+    setNewNumber(event.target.value)
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleEntryChange} />
-        </div>
+        <div> name: <input value={newName} onChange={handleNameEntryChange}/></div>
+        <div> number: <input value={newNumber} onChange={handleNumberEntryChange}/></div>
         <div>
           <button type="submit">add</button>
         </div>
