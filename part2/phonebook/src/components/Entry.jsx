@@ -1,5 +1,5 @@
 const Entry = ({ entry }) => {
-    return <li>{entry.name}</li>
+    return <p>{entry.name}</p>
   }
   
   export default Entry
