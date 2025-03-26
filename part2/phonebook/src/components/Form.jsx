@@ -29,14 +29,11 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
 
 
 return(
-    <>
-    <h2>add a new</h2>
     <form onSubmit={addName}>
         <div> name: <input value={newName} onChange={handleNameEntryChange}/></div>
         <div> number: <input value={newNumber} onChange={handleNumberEntryChange}/></div>
         <div><button type="submit">add</button></div>
     </form>
- </>
 )
 }
 
