@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber }) => { 
 
     const addName = (event) => {
@@ -10,9 +12,16 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
         const checkDuplicateName = (person) => person.name.toLowerCase() === newName.toLowerCase()
         const duplicateName = persons.some(checkDuplicateName)
         if (duplicateName === false) {
-        setPersons(persons.concat(nameObject))
-        setNewName('')
-        setNewNumber('')
+
+        axios
+            .post('http://localhost:3001/persons', nameObject)
+            .then(response => {
+              setPersons(persons.concat(response.data))
+              setNewName('')
+              setNewNumber('')
+            }
+          )
+        
         }
         else
         {
