@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import NumberList from './components/NumberList'
 import Form from './components/Form'
 import Search from './components/Search'
-import axios from 'axios'
+import personsService from './services/persons'
 
 const App = () => {
 
@@ -12,9 +12,16 @@ const App = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then((response) => {
-      setPersons(response.data)
-    })
+    personsService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+      .catch(error => {
+        alert(
+          `Error: Phonebook server down`
+        )
+      })
   }, [])
 
   return (

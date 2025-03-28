@@ -1,4 +1,5 @@
 import axios from 'axios'
+import personsService from '../services/persons'
 
 const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber }) => { 
 
@@ -12,15 +13,19 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
         const checkDuplicateName = (person) => person.name.toLowerCase() === newName.toLowerCase()
         const duplicateName = persons.some(checkDuplicateName)
         if (duplicateName === false) {
-
-        axios
-            .post('http://localhost:3001/persons', nameObject)
-            .then(response => {
-              setPersons(persons.concat(response.data))
-              setNewName('')
-              setNewNumber('')
-            }
-          )
+        
+        personsService
+          .create(nameObject)
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            alert(
+              `Error: ${nameObject.name} couldn't be added`
+            )
+          })
         
         }
         else
