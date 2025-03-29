@@ -3,7 +3,7 @@ import personsService from '../services/persons'
 const Entry = ({ entry, persons, setPersons }) => {
 
   const handleErase = () => {
-        console.log('Entry button pressed for:',entry.name)
+       /* console.log('Entry button pressed for:',entry.name) */
         if (window.confirm(`Delete ${entry.name}?`))
         {
         personsService

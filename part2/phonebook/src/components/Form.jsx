@@ -10,10 +10,11 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
           number: newNumber
         }
         const checkDuplicateName = (person) => person.name.toLowerCase() === newName.toLowerCase()
-        const duplicateName = persons.some(checkDuplicateName)
-        if (duplicateName === false) {
-        
-        personsService
+        const isDuplicate = persons.some(checkDuplicateName)
+        const duplicatePerson = persons.find(value => value.name.toLowerCase() === newName.toLowerCase())
+
+        if (isDuplicate === false) {
+           personsService
           .create(nameObject)
           .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
@@ -24,17 +25,26 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
         }
         else
         {
-          alert(`${newName} is already in the phonebook`)
-      }
-      }
-    
+         if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`))
+         {
+           personsService
+           .update(duplicatePerson.id, nameObject)
+           .then(updatedPerson => {
+             setPersons(persons.filter(person => person.number !== duplicatePerson.number).concat(updatedPerson))
+             setNewName('')
+             setNewNumber('')
+           })
+           .catch(error => alert(`Error: ${duplicatePerson.name} couldn't be updated`))
+       }
+       }
+       }
+
       const handleNameEntryChange = (event) => {
         setNewName(event.target.value)
       }
       const handleNumberEntryChange = (event) => {
         setNewNumber(event.target.value)
       }
-
 
 return(
     <form onSubmit={addName}>

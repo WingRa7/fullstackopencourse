@@ -1,7 +1,6 @@
 import Entry from "./Entry"
 
 const NumberList = ({ persons, setPersons, search }) => {
-    console.log('numberlist persons:', persons)
     const searchResult = persons.filter((person) => person.name.toLowerCase().startsWith(search.toLowerCase()))
 
 return(
