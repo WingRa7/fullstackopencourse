@@ -1,4 +1,3 @@
-import axios from 'axios'
 import personsService from '../services/persons'
 
 const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber }) => { 
@@ -21,17 +20,12 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
             setNewName('')
             setNewNumber('')
           })
-          .catch(error => {
-            alert(
-              `Error: ${nameObject.name} couldn't be added`
-            )
-          })
-        
+          .catch(error => alert(`Error: ${nameObject.name} couldn't be added`))
         }
         else
         {
           alert(`${newName} is already in the phonebook`)
-        }
+      }
       }
     
       const handleNameEntryChange = (event) => {

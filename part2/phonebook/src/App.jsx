@@ -33,7 +33,7 @@ const App = () => {
       persons={persons} newName={newName} newNumber={newNumber} search={search} 
       setPersons={setPersons} setNewName={setNewName} setNewNumber={setNewNumber} setSearch={setSearch}/>
       <h3>Numbers</h3>
-      <NumberList search={search} persons={persons} />
+      <NumberList search={search} persons={persons} setPersons={setPersons}/>
       </div>
   )
 }

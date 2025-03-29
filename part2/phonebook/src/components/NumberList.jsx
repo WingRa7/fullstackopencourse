@@ -1,11 +1,13 @@
 import Entry from "./Entry"
 
-const NumberList = ({ persons, search }) => {
+const NumberList = ({ persons, setPersons, search }) => {
+    console.log('numberlist persons:', persons)
     const searchResult = persons.filter((person) => person.name.toLowerCase().startsWith(search.toLowerCase()))
+
 return(
     <>
     {searchResult.map((entry) => (
-        <Entry key={entry.name} entry={entry} />
+        <Entry key={entry.name} entry={entry} persons={persons} setPersons={setPersons}/>
       ))}
     </>
 )
