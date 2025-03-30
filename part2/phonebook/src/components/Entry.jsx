@@ -1,6 +1,6 @@
 import personsService from '../services/persons'
 
-const Entry = ({ entry, persons, setPersons, setNotifyMessage }) => {
+const Entry = ({ entry, persons, setPersons, setErrorMessage, setSuccessMessage }) => {
 
   const handleErase = () => {
         if (window.confirm(`Delete ${entry.name}?`))
@@ -9,16 +9,16 @@ const Entry = ({ entry, persons, setPersons, setNotifyMessage }) => {
         .erase(entry.id)
         .then(deletedPerson => {
           setPersons(persons.filter(person => person.id !== deletedPerson.id))
-          setNotifyMessage(`Deleted ${deletedPerson.name}`)
+          setSuccessMessage(`Deleted ${deletedPerson.name}`)
           setTimeout(() => {
-            setNotifyMessage(null)
+            setSuccessMessage(null)
           }, 5000)
         })
         .catch(error => {
-          setNotifyMessage(
-            `Error: Unable to delete ${entry.name}`)
+          setErrorMessage(
+            `Unable to delete ${entry.name}`)
             setTimeout(() => {
-              setNotifyMessage(null)
+              setErrorMessage(null)
             }, 5000)
         })
       }

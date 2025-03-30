@@ -1,6 +1,6 @@
 import personsService from '../services/persons'
 
-const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber, setNotifyMessage }) => { 
+const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber, setErrorMessage, setSuccessMessage }) => { 
 
     const addName = (event) => {
     
@@ -20,15 +20,15 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNumber('')
-            setNotifyMessage(`Added ${returnedPerson.name}`)
+            setSuccessMessage(`Added ${returnedPerson.name}`)
               setTimeout(() => {
-              setNotifyMessage(null)
+              setSuccessMessage(null)
               }, 5000)
           })
           .catch((error) => {
-            setNotifyMessage(`Error: ${nameObject.name} couldn't be added`)
+            setErrorMessage(`${nameObject.name} couldn't be added`)
             setTimeout(() => {
-              setNotifyMessage(null)
+              setErrorMessage(null)
             }, 5000)
         })
         }
@@ -42,15 +42,15 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
              setPersons(persons.filter(person => person.number !== duplicatePerson.number).concat(updatedPerson))
              setNewName('')
              setNewNumber('')
-             setNotifyMessage(`Updated ${updatedPerson.name}`)
+             setSuccessMessage(`Updated ${updatedPerson.name}`)
               setTimeout(() => {
-              setNotifyMessage(null)
+              setSuccessMessage(null)
               }, 5000)
            })
            .catch((error) => {
-            setNotifyMessage(`Error: ${duplicatePerson.name} couldn't be updated`)
+            setErrorMessage(`Information of ${duplicatePerson.name} has already been removed from server`)
             setTimeout(() => {
-              setNotifyMessage(null)
+              setErrorMessage(null)
             }, 5000)
           })
        }

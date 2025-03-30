@@ -1,4 +1,4 @@
-const Notification = ({ notifyMessage }) => {
+const Notification = ({ errorMessage, successMessage }) => {
     
     const errorStyle = {
         color: 'red',
@@ -20,26 +20,25 @@ const Notification = ({ notifyMessage }) => {
         marginBottom: 10
     }
            
-    if (notifyMessage === null) {
+    if (errorMessage === null && successMessage === null) {
       return null
     }
     
-    if (notifyMessage.toLowerCase().includes('error')) {
+    if (errorMessage !== null) {
         return(
          <div style={errorStyle}>
-          {notifyMessage}
+          {errorMessage}
          </div>
         )
     }
 
-    if (notifyMessage !== null) {
+    if (successMessage !== null) {
         return(
          <div style={successStyle}>
-          {notifyMessage}
+          {successMessage}
          </div>
         )
     }
-
 
   }
 
