@@ -1,6 +1,6 @@
 import personsService from '../services/persons'
 
-const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber }) => { 
+const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber, setNotifyMessage }) => { 
 
     const addName = (event) => {
     
@@ -20,8 +20,17 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNumber('')
+            setNotifyMessage(`Added ${returnedPerson.name}`)
+              setTimeout(() => {
+              setNotifyMessage(null)
+              }, 5000)
           })
-          .catch(error => alert(`Error: ${nameObject.name} couldn't be added`))
+          .catch((error) => {
+            setNotifyMessage(`Error: ${nameObject.name} couldn't be added`)
+            setTimeout(() => {
+              setNotifyMessage(null)
+            }, 5000)
+        })
         }
         else
         {
@@ -33,8 +42,17 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
              setPersons(persons.filter(person => person.number !== duplicatePerson.number).concat(updatedPerson))
              setNewName('')
              setNewNumber('')
+             setNotifyMessage(`Updated ${updatedPerson.name}`)
+              setTimeout(() => {
+              setNotifyMessage(null)
+              }, 5000)
            })
-           .catch(error => alert(`Error: ${duplicatePerson.name} couldn't be updated`))
+           .catch((error) => {
+            setNotifyMessage(`Error: ${duplicatePerson.name} couldn't be updated`)
+            setTimeout(() => {
+              setNotifyMessage(null)
+            }, 5000)
+          })
        }
        }
        }

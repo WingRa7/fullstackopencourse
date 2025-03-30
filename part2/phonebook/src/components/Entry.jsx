@@ -1,20 +1,25 @@
 import personsService from '../services/persons'
 
-const Entry = ({ entry, persons, setPersons }) => {
+const Entry = ({ entry, persons, setPersons, setNotifyMessage }) => {
 
   const handleErase = () => {
-       /* console.log('Entry button pressed for:',entry.name) */
         if (window.confirm(`Delete ${entry.name}?`))
         {
         personsService
         .erase(entry.id)
         .then(deletedPerson => {
           setPersons(persons.filter(person => person.id !== deletedPerson.id))
+          setNotifyMessage(`Deleted ${deletedPerson.name}`)
+          setTimeout(() => {
+            setNotifyMessage(null)
+          }, 5000)
         })
         .catch(error => {
-          alert(
-            `Error: Unable to delete ${entry.name}`
-          )
+          setNotifyMessage(
+            `Error: Unable to delete ${entry.name}`)
+            setTimeout(() => {
+              setNotifyMessage(null)
+            }, 5000)
         })
       }
       }
