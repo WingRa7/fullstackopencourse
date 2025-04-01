@@ -19,8 +19,6 @@ useEffect(() => {
     })
 }, [])
 
-
-
   return (
     <>
     <Search search={search} setSearch={setSearch} />
