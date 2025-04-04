@@ -26,6 +26,28 @@ let persons = [
         }
     ]
 
+const generateRandomId = (max) => {
+   return String(Math.floor(Math.random() * max))
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    if(!body.name) {
+        return response.status(400).json({
+            error: 'name  missing'
+        })
+    }
+    const person = {
+        id: generateRandomId(1000),
+        name: body.name,
+        number: body.number,
+    }
+    persons = persons.concat(person)
+        return response.status(200).json({
+            message: 'added to phonebook'
+        })
+  })
+
 app.get('/info', (request, response) => {
     const now = new Date()
     response.send(
