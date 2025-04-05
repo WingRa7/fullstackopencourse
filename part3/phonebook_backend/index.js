@@ -26,8 +26,21 @@ let persons = [
         }
     ]
 
+morgan.token('body', (request) => { return JSON.stringify(request.body) })
+const morganPost = morgan(':method :url :status :res[content-length] - :response-time ms :body')
+const morganAll = morgan(':method :url :status :res[content-length] - :response-time ms')
+
+const morganLogger = (request, response, next) => {
+  if (request.method === 'POST') {
+    morganPost(request, response, next)
+  } else {
+    morganAll(request,response,next)
+  }
+}
+
+app.use(morganLogger)
 app.use(express.json())
-app.use(morgan('tiny'))
+
 
 const generateRandomId = (max) => {
    return String(Math.floor(Math.random() * max))
