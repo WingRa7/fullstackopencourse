@@ -7,7 +7,7 @@ import Notification from './components/Notification'
 
 const App = () => {
 
-  const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')

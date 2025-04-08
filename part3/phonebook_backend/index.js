@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
-
+const cors = require('cors')
 
 let persons = [
         { 
@@ -38,6 +38,7 @@ const morganLogger = (request, response, next) => {
   }
 }
 
+app.use(cors())
 app.use(morganLogger)
 app.use(express.json())
 
@@ -70,9 +71,7 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     }
     persons = persons.concat(person)
-        return response.status(200).json({
-            message: 'added to phonebook'
-        })
+        return response.status(200).json(person)
   })
 
 app.get('/info', (request, response) => {
@@ -98,9 +97,9 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
+  const deletedPerson = persons.find((person) => person.id === request.params.id)
   persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+  response.status(200).json(deletedPerson)
 })
 
 const PORT = 3001
