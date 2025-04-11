@@ -6,7 +6,6 @@ const app = express()
 const morgan = require('morgan')
 
 let persons = []
-console.log('persons array', persons)
 
 morgan.token('body', (request) => { return JSON.stringify(request.body) })
 const morganPost = morgan(':method :url :status :res[content-length] - :response-time ms :body')
@@ -71,11 +70,12 @@ app.get('/api/persons/:id', (request, response) => {
   })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const deletedPerson = persons.find((person) => person.id === request.params.id)
-  persons = persons.filter(person => person.id !== id)
-  response.status(200).json(deletedPerson)
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(deletedPerson => {
+      response.json(deletedPerson).status(204).end()
+    })
+    .catch(error => console.log(error))
 })
 
 const PORT = process.env.PORT
