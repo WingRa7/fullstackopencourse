@@ -63,10 +63,17 @@ app.post('/api/persons', (request, response, next) => {
   })
 
 app.get('/info', (request, response) => {
-    const now = new Date()
+  const now = new Date()
+  const FetchPersons = () => {
+    Person.find({})
+    .then(p => {
+    persons = p
     response.send(
-       `<p>Phonebook has info for ${persons.length} people</p>
-        <p>${now}</p>`)
+      `<p>Phonebook has info for ${persons.length} people</p>
+       <p>${now}</p>`)
+    })
+  }  
+  FetchPersons()
   })
 
 app.get('/api/persons', (request, response, next) => {
