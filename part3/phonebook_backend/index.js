@@ -24,7 +24,9 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }
@@ -36,11 +38,7 @@ app.use(express.static('dist'))
 app.post('/api/persons', (request, response, next) => {
     const body = request.body
     const duplicate = persons.find(person => person.name === body.name)
-    if(!body.name) {
-        return response.status(400).json({
-            error: 'name  missing'
-        })
-    }
+
     if(!body.number) {
         return response.status(400).json({
             error: 'number  missing'
@@ -69,8 +67,8 @@ app.get('/info', (request, response) => {
     .then(p => {
     persons = p
     response.send(
-      `<p>Phonebook has info for ${persons.length} people</p>
-       <p>${now}</p>`)
+    `<p>Phonebook has info for ${persons.length} people</p>
+     <p>${now}</p>`)
     })
   }  
   FetchPersons()

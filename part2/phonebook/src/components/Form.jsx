@@ -26,7 +26,7 @@ const Form = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumbe
               }, 5000)
           })
           .catch((error) => {
-            setErrorMessage(`${nameObject.name} couldn't be added`)
+            setErrorMessage(`${error.response.data.error}`)
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)
