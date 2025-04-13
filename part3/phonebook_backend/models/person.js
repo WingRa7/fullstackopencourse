@@ -23,11 +23,11 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    minLength: 8, // doesnt work on number type, only string
+    minLength: 8,
     required: true,
     validate: {
       validator: function(v) {
-        return /\d{2,3}-\d{5,}/.test(v)
+        return /(^\d{2}-\d{6,}$)|(^\d{3}-\d{5,}$)/.test(v)
       },
       message: `The number must be prefixed with 2-3 digits followed by - (##- or ###-)`
     }
