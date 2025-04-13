@@ -39,11 +39,6 @@ app.post('/api/persons', (request, response, next) => {
     const body = request.body
     const duplicate = persons.find(person => person.name === body.name)
 
-    if(!body.number) {
-        return response.status(400).json({
-            error: 'number  missing'
-        })
-    }
     if(duplicate) {
         return response.status(400).json({
             error: 'name must be unique'

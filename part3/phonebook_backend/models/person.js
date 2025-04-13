@@ -21,7 +21,18 @@ const personSchema = new mongoose.Schema({
     minLength: 3,
     required: true
   },
-  number: Number,
+  number: {
+    type: String,
+    minLength: 8, // doesnt work on number type, only string
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /\d{2,3}-\d{5,}/.test(v)
+      },
+      message: `The number must be prefixed with 2-3 digits followed by - (##- or ###-)`
+    }
+
+  },
 })
 
 personSchema.set('toJSON', {
