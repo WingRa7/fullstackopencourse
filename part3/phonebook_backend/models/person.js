@@ -7,13 +7,13 @@ const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 mongoose
-    .connect(url)
-    .then(result => {
-        console.log('connected to MongoDB')
-    })
-    .catch(error => {
-        console.log('error connecting to MongoDB:', error.message)
-    })
+  .connect(url)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch(error => {
+    console.log('error connecting to MongoDB:', error.message)
+  })
 
 const personSchema = new mongoose.Schema({
   name: {
@@ -29,7 +29,7 @@ const personSchema = new mongoose.Schema({
       validator: function(v) {
         return /(^\d{2}-\d{6,}$)|(^\d{3}-\d{5,}$)/.test(v)
       },
-      message: `The number must be prefixed with 2-3 digits followed by - (##- or ###-)`
+      message: 'The number must be prefixed with 2-3 digits followed by - (##- or ###-)'
     }
 
   },
