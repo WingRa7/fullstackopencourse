@@ -102,4 +102,20 @@ describe('favouriteBlog', () => {
       }
     )
   })
+
 })
+
+describe('mostActiveBlogger', () => {
+
+  test('of blogs is found', () => {
+    const result = listHelper.mostBlogs(blogs)
+    assert.deepStrictEqual(result ,
+      {
+        author: 'Robert C. Martin',
+        blogs: 3
+      }
+    )
+  })
+
+})
+
