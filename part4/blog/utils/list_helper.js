@@ -32,5 +32,24 @@ const mostBlogs = blogs => {
     .value()
   return result
 }
+ 
 
-module.exports = { dummy, totalLikes, favouriteBlog, mostBlogs }
+const mostLikes = blogs => {
+  const result =
+  _.chain(blogs)
+    .reduce((acc, value) => {
+      const author = value.author
+      const likes = value.likes
+      acc[author] = (acc[author] || 0) + likes
+      return acc
+    },{})
+    .reduce((acc, value, key) => {
+      const result = (value > acc.likes ? { author: key, likes: value } : acc)
+      return result
+    }, { author: '', likes: 0})
+    .value()
+  return result
+}
+
+
+module.exports = { dummy, totalLikes, favouriteBlog, mostBlogs, mostLikes }
