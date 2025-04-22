@@ -46,7 +46,7 @@ const mostLikes = blogs => {
     .reduce((acc, value, key) => {
       const result = (value > acc.likes ? { author: key, likes: value } : acc)
       return result
-    }, { author: '', likes: 0})
+    }, { author: '', likes: 0 })
     .value()
   return result
 }
