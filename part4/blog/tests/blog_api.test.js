@@ -79,10 +79,16 @@ describe('blog API test', () => {
     assert.strictEqual(response.body.length, initialBlogs.length)
   })
 
-})
+  test('blog posts have property: id', async () => {
+    const response = await api
+      .get('/api/blogs')
+      .expect(200)
+    const blogKeys = Object.keys(response.body[0])
+    assert(blogKeys.find( k => k === 'id'))
 
+  })
+})
 
 after(async () => {
   await mongoose.connection.close()
 })
-
