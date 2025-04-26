@@ -80,6 +80,35 @@ describe('blog API test', () => {
     const blogMissLikes = blogsAtEnd.find((b) => b.title === 'The man who built his own WH Smith' )
     assert(blogMissLikes.likes === 0)
   })
+
+  test('blog post created without title property returns status code 400 Bad Request', async () => {
+    const newBlog = {
+      author: 'Bradford Morgan White',
+      url: 'https://www.abortretry.fail/p/mips-for-the-masses',
+      likes: 2
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('blog post created without url property returns status code 400 Bad Request', async () => {
+    const newBlog = {
+      title: 'The blog that was never published',
+      author: 'Dave Holloway',
+      likes: 0
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
 })
 
 after(async () => {
