@@ -63,6 +63,23 @@ describe('blog API test', () => {
     assert(urls.includes('https://clp.bbcrewind.co.uk/history'))
   })
 
+  test('blog post created without likes property defaults to 0 likes', async () => {
+    const newBlog = {
+      title: 'The man who built his own WH Smith',
+      author: 'Lewis Packwood',
+      url: 'https://filmstories.co.uk/features/the-man-who-built-his-own-wh-smith/',
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const blogMissLikes = blogsAtEnd.find((b) => b.title === 'The man who built his own WH Smith' )
+    assert(blogMissLikes.likes === 0)
+  })
 })
 
 after(async () => {
