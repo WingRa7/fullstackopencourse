@@ -13,7 +13,7 @@ beforeEach(async () => {
   await Blog.insertMany(helper.initialBlogs)
 })
 
-describe('blog API test', () => {
+describe('when there is initially some blogs saved', () => {
 
   test('blogs are returned as json', async () => {
     await api
@@ -63,50 +63,70 @@ describe('blog API test', () => {
     assert(urls.includes('https://clp.bbcrewind.co.uk/history'))
   })
 
-  test('blog post created without likes property defaults to 0 likes', async () => {
-    const newBlog = {
-      title: 'The man who built his own WH Smith',
-      author: 'Lewis Packwood',
-      url: 'https://filmstories.co.uk/features/the-man-who-built-his-own-wh-smith/',
-    }
+  describe('when post requests are missing fields', () => {
+    test('blog post created without likes property defaults to 0 likes', async () => {
+      const newBlog = {
+        title: 'The man who built his own WH Smith',
+        author: 'Lewis Packwood',
+        url: 'https://filmstories.co.uk/features/the-man-who-built-his-own-wh-smith/',
+      }
 
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/)
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
 
-    const blogsAtEnd = await helper.blogsInDb()
-    const blogMissLikes = blogsAtEnd.find((b) => b.title === 'The man who built his own WH Smith' )
-    assert(blogMissLikes.likes === 0)
+      const blogsAtEnd = await helper.blogsInDb()
+      const blogMissLikes = blogsAtEnd.find((b) => b.title === 'The man who built his own WH Smith' )
+      assert(blogMissLikes.likes === 0)
+    })
+
+    test('blog post created without title property returns status code 400 Bad Request', async () => {
+      const newBlog = {
+        author: 'Bradford Morgan White',
+        url: 'https://www.abortretry.fail/p/mips-for-the-masses',
+        likes: 2
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+    })
+
+    test('blog post created without url property returns status code 400 Bad Request', async () => {
+      const newBlog = {
+        title: 'The blog that was never published',
+        author: 'Dave Holloway',
+        likes: 0
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+    })
   })
 
-  test('blog post created without title property returns status code 400 Bad Request', async () => {
-    const newBlog = {
-      author: 'Bradford Morgan White',
-      url: 'https://www.abortretry.fail/p/mips-for-the-masses',
-      likes: 2
-    }
+  describe('when modifying exisiting blogs', () => {
+    test ('blog post succesfully deleted', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
 
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(400)
-      .expect('Content-Type', /application\/json/)
-  })
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
 
-  test('blog post created without url property returns status code 400 Bad Request', async () => {
-    const newBlog = {
-      title: 'The blog that was never published',
-      author: 'Dave Holloway',
-      likes: 0
-    }
+      const blogsAtEnd = await helper.blogsInDb()
 
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(400)
-      .expect('Content-Type', /application\/json/)
+      const titles = blogsAtEnd.map(b => b.title)
+      assert(!titles.includes(blogToDelete.title))
+
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length -1)
+    })
   })
 
 })
