@@ -127,8 +127,32 @@ describe('when there is initially some blogs saved', () => {
 
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length -1)
     })
-  })
 
+    test ('blog post succesfully updated', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToUpdate = blogsAtStart[0]
+
+      const updatedBlog = {
+        title: 'React Patterns 2',
+        author: 'Michael J Chan',
+        url: 'https://reactpatterns.co.uk',
+        likes: 10
+      }
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+
+      const titles = blogsAtEnd.map(n => n.title)
+      assert(titles.includes(updatedBlog.title))
+
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+  })
 })
 
 after(async () => {
