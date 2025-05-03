@@ -1,9 +1,28 @@
 const mongoose = require('mongoose')
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-  passwordHash: { type: String, required: true },
+// Custom validation functions
+const isUsernameLength = (username) => {
+  return username.length >= 3
+}
+
+const userSchema = mongoose.Schema({
+  username: {
+    type: String,
+    required: [true, 'Password is required'],
+    unique: true,
+    validate: {
+      validator: isUsernameLength,
+      message: 'Username must be atleast 3 characters long' // also implemented on controller
+    }
+  },
+  name: {
+    type: String,
+    required: [true, 'Name is required']
+  },
+  passwordHash: {
+    type: String,
+    required: true //can't handle validation here
+  },
   blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +41,4 @@ userSchema.set('toJSON', {
   }
 })
 
-const User = mongoose.model('User', userSchema)
-
-module.exports = User
+module.exports =  mongoose.model('User', userSchema)
