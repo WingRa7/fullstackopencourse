@@ -93,6 +93,7 @@ describe('when there is initially some users and blogs saved', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', helper.initialToken())
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -108,17 +109,45 @@ describe('when there is initially some users and blogs saved', () => {
     assert(urls.includes('https://clp.bbcrewind.co.uk/history'))
   })
 
-  describe('when post requests are missing fields', () => {
-    test('blog post created without likes property defaults to 0 likes', async () => {
+  describe('when post requests are missing fields / headers', () => {
+
+    test('blog post created without valid token returns status code 401 Unauthorized', async () => {
       const newBlog = {
-        title: 'The man who built his own WH Smith',
-        author: 'Michael Chan',
-        url: 'https://filmstories.co.uk/features/the-man-who-built-his-own-wh-smith/',
-        userId: '6815cbc4b39dcf5e3173e14c'
+        title: 'Forgetting to add auth header',
+        author: 'Lenny Carrots',
+        url: 'https://auth.com/blog/headerz',
+        likes: 0,
+        userId: '6815df37029bd474200287d2'
       }
 
       await api
         .post('/api/blogs')
+        .set('Authorization', 'invalid token')
+        .send(newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+
+      const titles = blogsAtEnd.map(b => b.title)
+      assert(!titles.includes('Forgetting to add auth header'))
+      const urls = blogsAtEnd.map(b => b.url)
+      assert(!urls.includes('https://auth.com/blog/headerz'))
+    })
+
+
+    test('blog post created without likes property defaults to 0 likes', async () => {
+      const newBlog = {
+        title: 'The man who built his own WH Smith',
+        author: 'Lenny Carrots',
+        url: 'https://filmstories.co.uk/features/the-man-who-built-his-own-wh-smith/',
+        userId: '6815df37029bd474200287d2'
+      }
+
+      await api
+        .post('/api/blogs')
+        .set('Authorization', helper.initialToken())
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -130,14 +159,15 @@ describe('when there is initially some users and blogs saved', () => {
 
     test('blog post created without title property returns status code 400 Bad Request', async () => {
       const newBlog = {
-        author: 'Robert C. Martin',
-        url: 'https://www.abortretry.fail/p/mips-for-the-masses',
+        author: 'Lenny Carrots',
+        url: 'https://www.dismalfailure.com/p/forgotmytitle',
         likes: 2,
-        userId: '6815cbe20229df171e0a1db9'
+        userId: '6815df37029bd474200287d2'
       }
 
       await api
         .post('/api/blogs')
+        .set('Authorization', helper.initialToken())
         .send(newBlog)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -146,13 +176,14 @@ describe('when there is initially some users and blogs saved', () => {
     test('blog post created without url property returns status code 400 Bad Request', async () => {
       const newBlog = {
         title: 'The blog that was never published',
-        author: 'Robert C. Martin',
+        author: 'Lenny Carrots',
         likes: 0,
-        userId: '6815cbe20229df171e0a1db9'
+        userId: '6815df37029bd474200287d2'
       }
 
       await api
         .post('/api/blogs')
+        .set('Authorization', helper.initialToken())
         .send(newBlog)
         .expect(400)
         .expect('Content-Type', /application\/json/)

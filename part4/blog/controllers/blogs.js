@@ -1,6 +1,5 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 blogsRouter.post('/', async (request, response) => {
@@ -57,7 +56,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
 
   const user = request.user
-  
+
   if (user._id.toString() !== blog.user.toString()) {
     return response.status(403).json({ error: 'must be creator to delete'})
   }
