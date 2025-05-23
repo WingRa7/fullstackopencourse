@@ -92,6 +92,15 @@ const initialBlogs = [
     likes: 2,
     user: '6815cbe20229df171e0a1db9',
     __v: 0
+  },
+  {
+    _id: '682199d34e9d52d8aba48199',
+    title: 'To be deleted by test',
+    author: 'Lenny Carrots',
+    url: 'http://uselessblogs.com/blogs/deleted',
+    likes: 5,
+    user: '6815df37029bd474200287d2',
+    __v: 0
   }
 ]
 

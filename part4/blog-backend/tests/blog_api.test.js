@@ -195,10 +195,11 @@ describe('when there is initially some users and blogs saved', () => {
   describe('when modifying exisiting blogs', () => {
     test ('blog post succesfully deleted', async () => {
       const blogsAtStart = await helper.blogsInDb()
-      const blogToDelete = blogsAtStart[0]
+      const blogToDelete = blogsAtStart.find((b) => b.title === 'To be deleted by test')
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', helper.initialToken())
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
@@ -217,11 +218,13 @@ describe('when there is initially some users and blogs saved', () => {
         title: 'React Patterns 2',
         author: 'Michael J Chan',
         url: 'https://reactpatterns.co.uk',
-        likes: 10
+        likes: 10,
+        user: '6815cbc4b39dcf5e3173e14c',
       }
 
       await api
         .put(`/api/blogs/${blogToUpdate.id}`)
+        .set('Authorization', helper.initialToken())
         .send(updatedBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
