@@ -34,9 +34,9 @@ const App = () => {
       <button onClick={ok}>ok</button> 
       <button onClick={bad}>bad</button>
       <button onClick={reset}>reset stats</button>
-      <div>good {store.getState().good}</div>
-      <div>ok {store.getState().ok}</div>
-      <div>bad {store.getState().bad}</div>
+      <div>Good {store.getState().good}</div>
+      <div>Ok {store.getState().ok}</div>
+      <div>Bad {store.getState().bad}</div>
     </div>
   )
 }
