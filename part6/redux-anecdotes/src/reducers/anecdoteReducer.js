@@ -21,38 +21,19 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-// const anecdoteSlice = createSlice({
-//   name: 'anecdotes',
-//   initialState,
-//   reducers: {
-//     createAnecdote (state, action) {
-//       const content = action.payload
-//       state 
-//     }
-//   }
-// })
-
-export const incrementVote = (id) => {
-  return {
-    type: 'INCREMENT_VOTE',
-    payload: { id }
-  }
-}
-
-export const createAnecdote = (anecdote) => {
-  return {
-    type: 'ADD_ANECDOTE',
-    payload: {
-      content: anecdote,
-      id: getId(),
-      votes: 0 }
-  }
-}
-
-const anecdoteReducer = (state = initialState, action) => {
-  switch(action.type) {
-    case 'INCREMENT_VOTE': {
-      const id = action.payload.id
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    createAnecdote (state, action) {
+      state.push({
+        content: action.payload,
+        id: getId(),
+        votes: 0
+      })
+    },
+    incrementVote (state, action) {
+      const id = action.payload
       const anecdoteToChange = state.find(a => a.id === id)
       const changedAnecdote = {
         ...anecdoteToChange,
@@ -62,11 +43,8 @@ const anecdoteReducer = (state = initialState, action) => {
         anecdote.id !== id ? anecdote : changedAnecdote
       ).sort((a, b) => b.votes - a.votes)
     }
-    case 'ADD_ANECDOTE':
-      return state.concat(action.payload)
-    default:
-      return state
   }
-}
+})
 
-export default anecdoteReducer
+export const { createAnecdote, incrementVote } = anecdoteSlice.actions
+export default anecdoteSlice.reducer

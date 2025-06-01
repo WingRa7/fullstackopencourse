@@ -2,12 +2,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { incrementVote } from '../reducers/anecdoteReducer'
 
 export const AnecdoteList = () => {
-  
   const dispatch = useDispatch()
-
-  const anecdotes = useSelector(({ filter, anecdotes }) => {
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
     const filteredAnecdotes = anecdotes.filter((anecdote) => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
-
     return filteredAnecdotes
   })
 
