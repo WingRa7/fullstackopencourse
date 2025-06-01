@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import filterReducer, { setFilter } from './reducers/filterReducer'
 import anecdoteReducer, { createAnecdote, incrementVote } from './reducers/anecdoteReducer'
-import notificationReducer, { setNotification } from './reducers/notificationReducer'
+import notificationReducer, { createNotification, voteNotification } from './reducers/notificationReducer'
 
 
 const store = configureStore({
