@@ -36,8 +36,7 @@ export const createAnecdote = content => {
   }
 }
 
-export const voteAnecdote = (id) => {
-
+export const voteAnecdote = id => {
   return async (dispatch, getState) => {
     const state = getState()
     const anecdotesState = state.anecdotes

@@ -3,7 +3,7 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 4
+      "votes": 20
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -38,6 +38,16 @@
     {
       "id": "156e",
       "content": "Redux Toolkit is awesome!",
+      "votes": 0
+    },
+    {
+      "id": "49fb",
+      "content": "Always remember to flush",
+      "votes": 0
+    },
+    {
+      "id": "177c",
+      "content": "But it works in my machine today",
       "votes": 0
     }
   ]
