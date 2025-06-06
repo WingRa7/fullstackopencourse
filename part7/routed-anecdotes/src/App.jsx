@@ -82,7 +82,6 @@ const CreateNew = (props) => {
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
-    console.log('handleSubmit props:', props)
     e.preventDefault()
     props.addNew({
       content: content.value,
@@ -93,6 +92,12 @@ const CreateNew = (props) => {
     navigate('/')
   }
 
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.onReset()
+    author.onReset()
+    info.onReset()
+  }
 
   return (
     <div>
@@ -111,6 +116,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={handleReset} >reset</button>
       </form>
     </div>
   )
@@ -133,7 +139,6 @@ const App = () => {
       id: 2
     }
   ])
-  console.log('anecdotes:', anecdotes)
 
   const [notification, setNotification] = useState(null)
 
