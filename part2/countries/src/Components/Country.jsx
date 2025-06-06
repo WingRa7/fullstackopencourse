@@ -11,29 +11,32 @@ const Country = ({ country, resultLength }) => {
 
     const Weather = () => {
 
-            const apiUrl = `http://api.weatherapi.com/v1/current.json?key=`
-            const apiKey = import.meta.env.VITE_WEATHER_API_KEY
-            const apiQuery = `&q=${country.capital}&aqi=no`
+        const [temp, setTemp] = useState('')
+        const [wind, setWind] = useState('')
+        const [icon, setIcon] = useState('')
 
-            const [temp, setTemp] = useState('')
-            const [wind, setWind] = useState('')
-            const [icon, setIcon] = useState('')
+    useEffect(() => {
 
-            axios
-              .get(`${apiUrl}${apiKey}${apiQuery}`)
-              .then((response) => {
-                setTemp(response.data.current.temp_c)
-                setWind(response.data.current.wind_mph)
-                setIcon(response.data.current.condition.icon)
-               console.log('weather response',response.data.current.condition.icon)
-    })
+        const apiUrl = `http://api.weatherapi.com/v1/current.json?key=`
+        const apiKey = import.meta.env.VITE_WEATHER_API_KEY
+        const apiQuery = `&q=${country.capital}&aqi=no`
+
+        axios
+      .get(`${apiUrl}${apiKey}${apiQuery}`)
+      .then((response) => {
+        setTemp(response.data.current.temp_c)
+        setWind(response.data.current.wind_mph)
+        setIcon(response.data.current.condition.icon)
+})
+
+}, [])
             
         
         return(
             <>
             <h2>Weather in {country.capital}</h2>
             <p>Temperature {temp} Celsius</p>
-            <img src={icon} />
+            <img src={icon || null} />
             <p>Wind {Math.round(wind * 0.44704)} m/s</p>
             </>
         ) 
