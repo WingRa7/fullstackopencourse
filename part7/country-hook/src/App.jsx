@@ -14,20 +14,23 @@ const useField = (type) => {
     onChange
   }
 }
-// to complete
+
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
+  const searchTerm = name
 
-  useEffect(() => {
-    axios
-      .get('https://studies.cs.helsinki.fi/restcountries/api/all')
-      .then(initialCountries => {
-        setCountries(initialCountries.data)
-      })
-      .catch(error => {
-        console.log('Failed to initialise Countries')
-      })
-  }, [])
+    useEffect(() => {
+      console.log('search term', searchTerm)
+      if (searchTerm !== '') {
+      axios
+        .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${searchTerm}`)
+        .then(country => {
+          setCountry({...country, found: true})
+        })
+        .catch(error => {
+          setCountry({ found: false })
+        })
+    }}, [name])
 
   return country
 }
@@ -36,7 +39,7 @@ const Country = ({ country }) => {
   if (!country) {
     return null
   }
-// fix return
+
   if (!country.found) {
     return (
       <div>
@@ -44,15 +47,15 @@ const Country = ({ country }) => {
       </div>
     )
   }
-// fix render(return)
-  return (
-    <div>
-      <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flag} height='100' alt={`flag of ${country.data.name}`}/>  
-    </div>
-  )
+
+   return (
+      <div>
+        <h3>{country.data.name.common} </h3>
+        <div>capital {country.data.capital} </div>
+        <div>population {country.data.population}</div> 
+        <img src={country.data.flags.png} height='100' alt={`flag of ${country.data.name.common}`}/>  
+      </div>
+    )
 }
 
 const App = () => {
