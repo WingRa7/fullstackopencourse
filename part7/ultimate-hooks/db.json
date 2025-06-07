@@ -35,6 +35,14 @@
     {
       "content": "forking hell",
       "id": 9
+    },
+    {
+      "content": "graeber",
+      "id": 10
+    },
+    {
+      "content": "custom hooks are actually awesome",
+      "id": 11
     }
   ],
   "persons": [
@@ -62,6 +70,11 @@
       "name": "bella",
       "number": "2421345234",
       "id": 5
+    },
+    {
+      "name": "bella",
+      "number": "235",
+      "id": 6
     }
   ]
 }
