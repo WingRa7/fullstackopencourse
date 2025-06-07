@@ -1,0 +1,67 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "custom-hooks are awesome!"
+    },
+    {
+      "id": 2,
+      "content": "best feature ever <3"
+    },
+    {
+      "content": "custom-hooks are annoying",
+      "id": 3
+    },
+    {
+      "content": "it breaks",
+      "id": 4
+    },
+    {
+      "content": "do the cleaning",
+      "id": 5
+    },
+    {
+      "content": "do the cleaning again",
+      "id": 6
+    },
+    {
+      "content": "pour more coffee",
+      "id": 7
+    },
+    {
+      "content": "now it resets the field",
+      "id": 8
+    },
+    {
+      "content": "forking hell",
+      "id": 9
+    }
+  ],
+  "persons": [
+    {
+      "id": 1,
+      "name": "mluukkai",
+      "number": "040-5483923"
+    },
+    {
+      "id": 2,
+      "name": "hellas",
+      "number": "012-123123"
+    },
+    {
+      "name": "john",
+      "number": "4534",
+      "id": 3
+    },
+    {
+      "name": "name",
+      "number": "39054",
+      "id": 4
+    },
+    {
+      "name": "bella",
+      "number": "2421345234",
+      "id": 5
+    }
+  ]
+}

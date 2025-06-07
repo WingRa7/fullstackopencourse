@@ -20,7 +20,6 @@ const useCountry = (name) => {
   const searchTerm = name
 
     useEffect(() => {
-      console.log('search term', searchTerm)
       if (searchTerm !== '') {
       axios
         .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${searchTerm}`)
