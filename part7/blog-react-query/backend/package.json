@@ -1,0 +1,44 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "Tom Raine",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development node --watch index.js",
+    "test": "NODE_ENV=test node --test",
+    "start:test": "NODE_ENV=test node index.js",
+    "testblog": "NODE_ENV=test node -- tests/blog_api.test.js",
+    "lint": "eslint .",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.14.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@stylistic/eslint-plugin-js": "^4.2.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
+    "prettier": "3.5.3",
+    "supertest": "^7.1.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": [
+      "prettier --write --ignore-unknown",
+      "eslint --fix"
+    ]
+  }
+}

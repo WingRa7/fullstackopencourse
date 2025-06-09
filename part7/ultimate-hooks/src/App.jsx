@@ -49,8 +49,6 @@ const App = () => {
   const { reset: contentReset, ...content } = useField('text')
   const { reset: nameReset, ...name } = useField('text')
   const { reset: numberReset, ...number } = useField('text')
- 
-   console.log('content useField:',content)
 
   const [notes, noteService] = useResource('http://localhost:3005/notes')
   const [persons, personService] = useResource('http://localhost:3005/persons')
