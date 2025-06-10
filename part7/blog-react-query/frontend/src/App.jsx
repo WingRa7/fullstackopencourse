@@ -19,15 +19,92 @@ import loginService from './services/login'
 import './index.css'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const queryClient = useQueryClient()
   const dispatch = useNotificationDispatch()
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
+  const blogsQuery = useQuery({
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll,
+  })
+  console.log(JSON.parse(JSON.stringify(blogsQuery)))
+
+  const blogs = blogsQuery.data
+
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(['blogs'], blogs.concat(newBlog))
+      dispatch({
+        type: 'NEW',
+        payload: `a new blog '${newBlog.title}' by ${newBlog.author} added`,
+      })
+      setTimeout(() => {
+        dispatch({ type: 'RESET' })
+      }, 5000)
+    },
+    onError: (error, variables) => {
+      console.log('error:', variables)
+      dispatch({
+        type: 'ERROR',
+        payload: `the blog '${variables.title}' by ${variables.author} could not be added`,
+      })
+      setTimeout(() => {
+        dispatch({ type: 'RESET' })
+      }, 5000)
+    },
+  })
+
+  const updateBlogMutation = useMutation({
+    mutationFn: blogService.update,
+    onSuccess: (updatedBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(
+        ['blogs'],
+        blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
+      )
+    },
+    onError: (error) => {
+      dispatch({
+        type: 'ERROR',
+        payload: 'Like could not be added',
+      })
+      setTimeout(() => {
+        dispatch({ type: 'RESET' })
+      }, 5000)
+    },
+  })
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: blogService.remove,
+    onSuccess: (deletedBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      const splicedBlogs = blogs
+      const blogIndex = blogs.findIndex((blog) => {
+        return blog.id === deletedBlog.id
+      })
+      splicedBlogs.splice(blogIndex, 1)
+      queryClient.setQueryData(['blogs'], splicedBlogs)
+      dispatch({
+        type: 'REMOVE',
+        payload: 'Blog deleted',
+      })
+      setTimeout(() => {
+        dispatch({ type: 'RESET' })
+      }, 5000)
+    },
+    onError: (error) => {
+      dispatch({
+        type: 'ERROR',
+        payload: 'Blog could not be deleted',
+      })
+      setTimeout(() => {
+        dispatch({ type: 'RESET' })
+      }, 5000)
+    },
+  })
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -42,70 +119,15 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    try {
-      const newBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(newBlog))
-      dispatch({
-        type: 'NEW',
-        payload: `a new blog '${blogObject.title}' by ${blogObject.author} added`,
-      })
-      setTimeout(() => {
-        dispatch({ type: 'RESET' })
-      }, 5000)
-    } catch (error) {
-      dispatch({
-        type: 'ERROR',
-        payload: `the blog ${blogObject.title} by ${blogObject.author} could not be added`,
-      })
-      setTimeout(() => {
-        dispatch({ type: 'RESET' })
-      }, 5000)
-    }
+    newBlogMutation.mutate(blogObject)
   }
 
   const updateBlog = async (blogObject) => {
-    try {
-      const updatedBlog = await blogService.update(blogObject)
-      setBlogs(
-        blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
-      )
-    } catch (error) {
-      dispatch({
-        type: 'ERROR',
-        payload: 'Like could not be added',
-      })
-      setTimeout(() => {
-        dispatch({ type: 'RESET' })
-      }, 5000)
-    }
+    updateBlogMutation.mutate(blogObject)
   }
 
   const deleteBlog = async (blogObject) => {
-    const blogIndex = blogs.findIndex((blog) => {
-      return blog.id === blogObject.id
-    })
-    const blogsArr = blogs
-
-    try {
-      await blogService.remove(blogObject)
-      blogsArr.splice(blogIndex, 1)
-      setBlogs(blogsArr)
-      dispatch({
-        type: 'REMOVE',
-        payload: 'Blog deleted',
-      })
-      setTimeout(() => {
-        dispatch({ type: 'RESET' })
-      }, 5000)
-    } catch (exception) {
-      dispatch({
-        type: 'ERROR',
-        payload: 'Blog could not be deleted',
-      })
-      setTimeout(() => {
-        dispatch({ type: 'RESET' })
-      }, 5000)
-    }
+    deleteBlogMutation.mutate(blogObject)
   }
 
   const handleLogin = async (credentialsObject) => {
@@ -142,6 +164,10 @@ const App = () => {
     setTimeout(() => {
       dispatch({ type: 'RESET' })
     }, 5000)
+  }
+
+  if (blogsQuery.isLoading) {
+    return <div>loading data...</div>
   }
 
   if (user === null) {
