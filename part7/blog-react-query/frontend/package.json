@@ -8,10 +8,14 @@
     "build": "vite build",
     "test": "vitest run",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "npx prettier . --check",
+    "check-format": "npx prettier . --list-different"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.80.6",
     "axios": "^1.4.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

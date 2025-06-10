@@ -1,24 +1,32 @@
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+} from '@tanstack/react-query'
+import { useNotificationDispatch } from './contexts/NotificationContext'
+
 import { useState, useEffect, useRef } from 'react'
+
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
 
+  const queryClient = useQueryClient()
+  const dispatch = useNotificationDispatch()
+
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(blogs =>
-        setBlogs(blogs)
-      )
+    blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -34,71 +42,92 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    try{
+    try {
       const newBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(newBlog))
-      setErrorMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+      dispatch({
+        type: 'NEW',
+        payload: `a new blog '${blogObject.title}' by ${blogObject.author} added`,
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch({ type: 'RESET' })
       }, 5000)
     } catch (error) {
-      setErrorMessage(`the blog ${blogObject.title} by ${blogObject.author} could not be added`)
+      dispatch({
+        type: 'ERROR',
+        payload: `the blog ${blogObject.title} by ${blogObject.author} could not be added`,
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch({ type: 'RESET' })
       }, 5000)
     }
   }
 
   const updateBlog = async (blogObject) => {
-    try{
+    try {
       const updatedBlog = await blogService.update(blogObject)
-      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
-    } catch (error) {
-      setErrorMessage(
-        'Like could not be added'
+      setBlogs(
+        blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
       )
+    } catch (error) {
+      dispatch({
+        type: 'ERROR',
+        payload: 'Like could not be added',
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch({ type: 'RESET' })
       }, 5000)
     }
   }
 
   const deleteBlog = async (blogObject) => {
-
-    const blogIndex = blogs.findIndex(blog => {return blog.id === blogObject.id})
+    const blogIndex = blogs.findIndex((blog) => {
+      return blog.id === blogObject.id
+    })
     const blogsArr = blogs
 
-    try{
-      await blogService
-        .remove(blogObject)
+    try {
+      await blogService.remove(blogObject)
       blogsArr.splice(blogIndex, 1)
       setBlogs(blogsArr)
-      setErrorMessage('Blog deleted')
+      dispatch({
+        type: 'REMOVE',
+        payload: 'Blog deleted',
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch({ type: 'RESET' })
       }, 5000)
     } catch (exception) {
-      setErrorMessage('Blog could not be deleted') // can add error middleware for different responses (exception.response.status)
+      dispatch({
+        type: 'ERROR',
+        payload: 'Blog could not be deleted',
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch({ type: 'RESET' })
       }, 5000)
     }
   }
 
   const handleLogin = async (credentialsObject) => {
-    try{
+    try {
       const user = await loginService.login(credentialsObject)
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setErrorMessage('Logged in succesfully')
+      dispatch({
+        type: 'LOGIN',
+        payload: 'Logged in succesfully',
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch({ type: 'RESET' })
       }, 5000)
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      dispatch({
+        type: 'ERROR',
+        payload: 'Wrong credentials',
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch({ type: 'RESET' })
       }, 5000)
     }
   }
@@ -106,9 +135,12 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
-    setErrorMessage('Logged out successfully')
+    dispatch({
+      type: 'LOGOUT',
+      payload: 'Logged out successfully',
+    })
     setTimeout(() => {
-      setErrorMessage(null)
+      dispatch({ type: 'RESET' })
     }, 5000)
   }
 
@@ -117,8 +149,8 @@ const App = () => {
       <div>
         <h1>Blogs</h1>
         <h2>Log in to application</h2>
-        <Notification message={errorMessage}/>
-        <LoginForm processLogin={handleLogin}/>
+        <Notification />
+        <LoginForm processLogin={handleLogin} />
       </div>
     )
   }
@@ -126,21 +158,27 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
-      <Notification message={errorMessage}/>
+      <Notification />
       <p>
         {user.name} is logged in
-        <button className="button-secondary" onClick={handleLogout}>Logout</button>
+        <button className="button-secondary" onClick={handleLogout}>
+          Logout
+        </button>
       </p>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm createBlog={addBlog}/>
+        <BlogForm createBlog={addBlog} />
       </Togglable>
-      {
-        blogs
-          .sort((a, b) => b.likes - a.likes)
-          .map(blog =>
-            <Blog key={blog.id} blog={blog} user={user} processLike={updateBlog} processDelete={deleteBlog}/>
-          )
-      }
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            user={user}
+            processLike={updateBlog}
+            processDelete={deleteBlog}
+          />
+        ))}
     </div>
   )
 }

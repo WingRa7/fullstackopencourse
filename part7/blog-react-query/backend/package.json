@@ -13,7 +13,10 @@
     "start:test": "NODE_ENV=test node index.js",
     "testblog": "NODE_ENV=test node -- tests/blog_api.test.js",
     "lint": "eslint .",
-    "prepare": "husky"
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky",
+    "format": "npx prettier . --check",
+    "check-format": "npx prettier . --list-different"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

@@ -17,13 +17,10 @@ describe('<BlogForm/>', () => {
   }
 
   beforeEach(() => {
-    container = render(
-      <BlogForm createBlog={mockAddBlog} />
-    ).container
+    container = render(<BlogForm createBlog={mockAddBlog} />).container
   })
 
   test('When a new blog is created, the correct details are passed to the function.', async () => {
-
     const user = userEvent.setup()
     const titleInput = container.querySelector('[name="Title"]')
     const authorInput = container.querySelector('[name="Author"]')
@@ -39,8 +36,5 @@ describe('<BlogForm/>', () => {
     expect(mockAddBlog.mock.calls[0][0].title).toBe('Title that renders nicely')
     expect(mockAddBlog.mock.calls[0][0].author).toBe('Harold')
     expect(mockAddBlog.mock.calls[0][0].url).toBe('http://www.notrendered.com')
-
-
   })
-
 })

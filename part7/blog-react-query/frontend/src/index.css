@@ -1,304 +1,300 @@
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap');
 
 :root {
-    --color-white: #ffffff;
-    --color-black: #000000;
-    --color-grey-lightest: #f9f9f9;
-    --color-grey-light: #dddddd;
-    --color-grey-medium: #D1D5DB;
-    --color-grey-dark: #1f2937;
-    --color-grey-very-dark: #111827;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-grey-lightest: #f9f9f9;
+  --color-grey-light: #dddddd;
+  --color-grey-medium: #d1d5db;
+  --color-grey-dark: #1f2937;
+  --color-grey-very-dark: #111827;
 
-    --color-brand-primary: #007bff;
-    --color-brand-secondary: #6c757d;
-    --color-brand-success: #28a745;
-    --color-brand-danger: #dc3545;
+  --color-brand-primary: #007bff;
+  --color-brand-secondary: #6c757d;
+  --color-brand-success: #28a745;
+  --color-brand-danger: #dc3545;
 
-    --color-text-default: #333;
-    --color-placeholder: #bbbbbb;
+  --color-text-default: #333;
+  --color-placeholder: #bbbbbb;
 
-    --color-background-page: #fff;
-    --color-background-notification-error: #fff8f8;
-    --color-background-notification-success: #fff8f8;
+  --color-background-page: #fff;
+  --color-background-notification-error: #fff8f8;
+  --color-background-notification-success: #fff8f8;
 
-    --color-border-default: #ccc;
-    --color-border-notification-error: #d50000;
-    --color-border-notification-success: #28a745;
+  --color-border-default: #ccc;
+  --color-border-notification-error: #d50000;
+  --color-border-notification-success: #28a745;
 
-    --color-shadow-dark: #0000000D;
-    --color-shadow-light: #FFFFFF1A;
-    --color-outline-focus: #FFFFFF4D;
-    --color-outline-default: #007BFF80;
+  --color-shadow-dark: #0000000d;
+  --color-shadow-light: #ffffff1a;
+  --color-outline-focus: #ffffff4d;
+  --color-outline-default: #007bff80;
 
+  --font-family-base: 'Source Sans Pro', sans-serif;
+  --font-size-base: 16px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
 
-    --font-family-base: "Source Sans Pro", sans-serif;
-    --font-size-base: 16px;
-    --font-weight-normal: 400;
-    --font-weight-bold: 700;
+  --font-size-sm: 0.875rem;
+  --font-size-base-em: 0.9em;
 
-    --font-size-sm: 0.875rem;
-    --font-size-base-em: 0.9em;
+  --space-xxs: 0.25rem;
+  --space-xs: 10px;
+  --space-sm: 15px;
+  --space-md: 20px;
 
+  --size-radius-sm: 4px;
+  --size-radius-md: 8px;
+  --size-radius-lg: 0.5rem;
+  --size-border-width-sm: 1px;
+  --size-border-width-md: 2px;
+  --size-line-height-base: 1.6;
+  --size-line-height-button: 1.25rem;
+  --size-input-max-width: 425px;
+  --size-label-min-width: 80px;
+  --size-textarea-min-height: 150px;
 
-    --space-xxs: 0.25rem;
-    --space-xs: 10px;
-    --space-sm: 15px;
-    --space-md: 20px;
-
-
-    --size-radius-sm: 4px;
-    --size-radius-md: 8px;
-    --size-radius-lg: 0.5rem;
-    --size-border-width-sm: 1px;
-    --size-border-width-md: 2px;
-    --size-line-height-base: 1.6;
-    --size-line-height-button: 1.25rem;
-    --size-input-max-width: 425px;
-    --size-label-min-width: 80px;
-    --size-textarea-min-height: 150px;
-
-
-    --transition-speed-fast: 0.25s;
-    --transition-speed-normal: 0.3s;
+  --transition-speed-fast: 0.25s;
+  --transition-speed-normal: 0.3s;
 }
 
-
-*, *::before, *::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-    background-color: var(--color-background-page);
-    color: var(--color-black);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    padding: var(--space-md);
-    line-height: var(--size-line-height-base);
-    min-height: 100vh;
-    margin: 0;
+  background-color: var(--color-background-page);
+  color: var(--color-black);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  padding: var(--space-md);
+  line-height: var(--size-line-height-base);
+  min-height: 100vh;
+  margin: 0;
 }
 
-h1, h2 {
-    color: var(--color-black);
-    margin-top: 0;
-    margin-bottom: var(--space-md);
+h1,
+h2 {
+  color: var(--color-black);
+  margin-top: 0;
+  margin-bottom: var(--space-md);
 }
 
 p {
-    color: var(--color-black);
-    margin-bottom: var(--space-md);
+  color: var(--color-black);
+  margin-bottom: var(--space-md);
 }
 
 label {
-    font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-bold);
 }
 
 button {
-    padding: 0.40rem 0.50rem;
-    margin: var(--space-xxs);
-    border-radius: var(--size-radius-lg);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    line-height: var(--size-line-height-button);
-    cursor: pointer;
-    text-align: center;
-    user-select: none;
-    touch-action: manipulation;
-    outline-offset: var(--size-border-width-md);
-    border-width: var(--size-border-width-sm);
-    border-style: solid;
+  padding: 0.4rem 0.5rem;
+  margin: var(--space-xxs);
+  border-radius: var(--size-radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  line-height: var(--size-line-height-button);
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+  touch-action: manipulation;
+  outline-offset: var(--size-border-width-md);
+  border-width: var(--size-border-width-sm);
+  border-style: solid;
 
-    background-color: var(--button-bg);
-    border-color: var(--button-border-color);
-    color: var(--button-text);
-    box-shadow: 0 var(--size-border-width-sm) var(--size-border-width-md) 0 var(--button-shadow-color);
-    outline: var(--size-border-width-md) solid var(--button-focus-outline);
+  background-color: var(--button-bg);
+  border-color: var(--button-border-color);
+  color: var(--button-text);
+  box-shadow: 0 var(--size-border-width-sm) var(--size-border-width-md) 0
+    var(--button-shadow-color);
+  outline: var(--size-border-width-md) solid var(--button-focus-outline);
 
-    transition: background-color var(--transition-speed-normal) ease,
-                border-color var(--transition-speed-normal) ease,
-                color var(--transition-speed-normal) ease,
-                box-shadow var(--transition-speed-normal) ease,
-                outline var(--transition-speed-normal) ease;
+  transition:
+    background-color var(--transition-speed-normal) ease,
+    border-color var(--transition-speed-normal) ease,
+    color var(--transition-speed-normal) ease,
+    box-shadow var(--transition-speed-normal) ease,
+    outline var(--transition-speed-normal) ease;
 }
 
 button:hover {
-    background-color: var(--button-hover-bg);
-    border-color: var(--button-hover-border, var(--button-border-color));
-    color: var(--button-hover-text, var(--button-text));
-  }
+  background-color: var(--button-hover-bg);
+  border-color: var(--button-hover-border, var(--button-border-color));
+  color: var(--button-hover-text, var(--button-text));
+}
 
-  button:focus {
-    outline: var(--size-border-width-md) solid var(--button-focus-outline);
-    box-shadow: 0 0 0 var(--size-border-width-md) var(--button-focus-outline);
-  }
+button:focus {
+  outline: var(--size-border-width-md) solid var(--button-focus-outline);
+  box-shadow: 0 0 0 var(--size-border-width-md) var(--button-focus-outline);
+}
 
-  button:focus:not(:focus-visible) {
-      outline: none;
-      box-shadow: none;
-  }
+button:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
 
 .button-primary {
-    --button-bg: var(--color-black);
-    --button-border-color: var(--color-grey-medium);
-    --button-text: var(--color-white);
-    --button-shadow-color: var(--color-shadow-light);
-    --button-hover-bg: var(--color-grey-dark);
-    --button-focus-outline: var(--color-outline-focus);
-  }
+  --button-bg: var(--color-black);
+  --button-border-color: var(--color-grey-medium);
+  --button-text: var(--color-white);
+  --button-shadow-color: var(--color-shadow-light);
+  --button-hover-bg: var(--color-grey-dark);
+  --button-focus-outline: var(--color-outline-focus);
+}
 
-  .button-secondary {
-    --button-bg: var(--color-white);
-    --button-border-color: var(--color-grey-medium);
-    --button-text: var(--color-black);
-    --button-shadow-color: var(--color-shadow-dark);
-    --button-hover-bg: var(--color-grey-lightest);
-    --button-focus-outline: var(--color-outline-focus);
-  }
-
+.button-secondary {
+  --button-bg: var(--color-white);
+  --button-border-color: var(--color-grey-medium);
+  --button-text: var(--color-black);
+  --button-shadow-color: var(--color-shadow-dark);
+  --button-hover-bg: var(--color-grey-lightest);
+  --button-focus-outline: var(--color-outline-focus);
+}
 
 .notification {
-    font-size: var(--size-font-base);
-    border-style: solid;
-    border-radius: var(--size-radius-sm);
-    padding: var(--space-xs);
-    margin-bottom: var(--space-md);
-    text-align: center;
+  font-size: var(--size-font-base);
+  border-style: solid;
+  border-radius: var(--size-radius-sm);
+  padding: var(--space-xs);
+  margin-bottom: var(--space-md);
+  text-align: center;
 }
 
 .notification-error {
-    color: var(--color-danger);
-    background: var(--color-background-notification-error);
-    border-color: var(--color-border-notification-error);
+  color: var(--color-danger);
+  background: var(--color-background-notification-error);
+  border-color: var(--color-border-notification-error);
 }
 
 .notification-success {
-    color: var(--color-success);
-    background: var(--color-background-notification-success);
-    border-color: var(--color-border-notification-success);
+  color: var(--color-success);
+  background: var(--color-background-notification-success);
+  border-color: var(--color-border-notification-success);
 }
 
-
 .blog {
-    background-color: var(--color-white);
-    border: var(--size-border-width-sm) solid var(--color-grey-light);
-    box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
-    padding: var(--space-sm);
-    margin-bottom: var(--space-sm);
-    margin-top: var(--space-sm);
-    border-radius: var(--size-radius-md);
-    color: var(--color-black);
+  background-color: var(--color-white);
+  border: var(--size-border-width-sm) solid var(--color-grey-light);
+  box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  margin-top: var(--space-sm);
+  border-radius: var(--size-radius-md);
+  color: var(--color-black);
 }
 
 .blog > div:first-child {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
 }
 
-.blog h3, p {
-    margin-top: var(--space-xs);
-    margin-bottom: var(--space-xs);
+.blog h3,
+p {
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xs);
 }
 
 .blog > div:not(:first-child) {
-    padding-top: var(--space-xs);
+  padding-top: var(--space-xs);
 }
 
 .blog .remove {
-    margin-left: 0;
+  margin-left: 0;
 }
 
-
 form {
-    padding: var(--space-md);
-    background-color: var(--color-white);
-    border-radius: var(--size-radius-md);
-    margin-bottom: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-white);
+  border-radius: var(--size-radius-md);
+  margin-bottom: var(--space-sm);
 }
 
 .loginform {
-    border: var(--size-border-width-sm) solid var(--color-border-default);
-    box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
+  border: var(--size-border-width-sm) solid var(--color-border-default);
+  box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
 }
 
 .blogform {
-     border: var(--size-border-width-sm) solid var(--color-border-default);
-     box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
+  border: var(--size-border-width-sm) solid var(--color-border-default);
+  box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
 }
-
 
 /* Form Item (div wrapping label/input) */
 form div {
-    margin-bottom: var(--space-sm);
-    display: flex;
-    align-items: center;
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
 }
 
 /* Form Label */
 form label {
-    font-weight: 600;
-    padding: var(--space-xs) 0;
-    min-width: var(--size-label-min-width);
-    margin-right: var(--space-xs);
-    color: var(--color-black);
-    align-self: auto;
+  font-weight: 600;
+  padding: var(--space-xs) 0;
+  min-width: var(--size-label-min-width);
+  margin-right: var(--space-xs);
+  color: var(--color-black);
+  align-self: auto;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="number"],
-input[type="date"],
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='number'],
+input[type='date'],
 select,
 textarea {
-    display: block;
-    width: 100%;
-    max-width: var(--size-input-max-width);
-    padding: var(--space-xxs);
-    font-size: var(--font-size-base);
-    font-family: var(--font-family-base);
-    line-height: var(--size-line-height-base);
-    color: var(--color-text-default);
-    background-color: var(--color-background-page);
-    border: var(--size-border-width-sm) solid var(--color-border-default);
-    border-radius: var(--size-radius-sm);
-    outline: none;
-    resize: none;
-    min-height: auto;
+  display: block;
+  width: 100%;
+  max-width: var(--size-input-max-width);
+  padding: var(--space-xxs);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--size-line-height-base);
+  color: var(--color-text-default);
+  background-color: var(--color-background-page);
+  border: var(--size-border-width-sm) solid var(--color-border-default);
+  border-radius: var(--size-radius-sm);
+  outline: none;
+  resize: none;
+  min-height: auto;
 
-    transition: border-color var(--transition-speed-fast) ease,
-                box-shadow var(--transition-speed-fast) ease;
+  transition:
+    border-color var(--transition-speed-fast) ease,
+    box-shadow var(--transition-speed-fast) ease;
 }
 
 textarea {
-    min-height: var(--size-textarea-min-height);
+  min-height: var(--size-textarea-min-height);
 }
 
-
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+input[type='date']:focus,
 select:focus,
 textarea:focus {
-    background: var(--color-white);
-    border-color: var(--color-black);
+  background: var(--color-white);
+  border-color: var(--color-black);
 }
 
 input::placeholder,
 textarea::placeholder {
-    color: var(--color-placeholder);
+  color: var(--color-placeholder);
 }
 
-
 .togglable {
-    padding: var(--space-sm);
-    border-radius: var(--size-radius-md);
-    border: var(--size-border-width-sm) solid var(--color-border-default);
-    box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
-    margin-bottom: var(--space-md);
-    background-color: var(--color-white);
-    color: var(--color-black);
+  padding: var(--space-sm);
+  border-radius: var(--size-radius-md);
+  border: var(--size-border-width-sm) solid var(--color-border-default);
+  box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
+  margin-bottom: var(--space-md);
+  background-color: var(--color-white);
+  color: var(--color-black);
 }

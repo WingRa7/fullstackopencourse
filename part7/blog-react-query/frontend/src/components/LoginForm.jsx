@@ -1,10 +1,8 @@
 import { useState } from 'react'
 
 const LoginForm = ({ processLogin }) => {
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -22,7 +20,7 @@ const LoginForm = ({ processLogin }) => {
             type="text"
             value={username}
             name="Username"
-            onChange={event => setUsername(event.target.value)}
+            onChange={(event) => setUsername(event.target.value)}
           />
         </div>
         <div>
@@ -31,10 +29,12 @@ const LoginForm = ({ processLogin }) => {
             type="password"
             value={password}
             name="Password"
-            onChange={event => setPassword(event.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button className="button-primary" type="submit">Login</button>
+        <button className="button-primary" type="submit">
+          Login
+        </button>
       </form>
     </div>
   )
