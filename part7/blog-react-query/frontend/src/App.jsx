@@ -7,7 +7,7 @@ import {
 import { useNotificationDispatch } from './contexts/NotificationContext'
 import { useUserDispatch, useUserValue } from './contexts/UserContext'
 
-import { useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -16,6 +16,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
+import loginService from './services/login'
 import './index.css'
 
 const App = () => {
@@ -31,23 +32,17 @@ const App = () => {
   // console.log(JSON.parse(JSON.stringify(blogsQuery)))
   const blogs = blogsQuery.data
 
-  const userQuery = useQuery({
-    queryKey: ['user'],
-    queryFn: () => {
-      const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-      if (loggedUserJSON) {
-        const currentUser = JSON.parse(loggedUserJSON)
-        dispatchUser({
-          type: 'LOGIN',
-          payload: currentUser,
-        })
-        blogService.setToken(currentUser.token)
-        return currentUser
-      }
-      return null
-    },
-  })
-  // console.log(JSON.parse(JSON.stringify(userQuery)))
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const currentUser = JSON.parse(loggedUserJSON)
+      dispatchUser({
+        type: 'LOGIN',
+        payload: currentUser,
+      })
+      blogService.setToken(currentUser.token)
+    }
+  }, [])
 
   const blogFormRef = useRef()
 
@@ -71,9 +66,6 @@ const App = () => {
   }
 
   if (blogsQuery.isLoading) {
-    return <div>loading data...</div>
-  }
-  if (userQuery.isLoading) {
     return <div>loading data...</div>
   }
 
