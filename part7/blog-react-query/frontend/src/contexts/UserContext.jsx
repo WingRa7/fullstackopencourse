@@ -1,9 +1,7 @@
 import { createContext, useReducer, useContext } from 'react'
 
 const userReducer = (state, action) => {
-  switch (
-    action.type // need to review actions
-  ) {
+  switch (action.type) {
     case 'LOGIN':
       return action.payload
     case 'LOGOUT':

@@ -7,7 +7,8 @@ import {
 import { useNotificationDispatch } from './contexts/NotificationContext'
 import { useUserDispatch, useUserValue } from './contexts/UserContext'
 
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import './index.css'
 
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -17,7 +18,46 @@ import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
-import './index.css'
+import userService from './services/users'
+
+import {
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useParams,
+  useNavigate,
+  useMatch,
+} from 'react-router-dom'
+import users from './services/users'
+
+const UsersList = ({ users }) => {
+  return (
+    <div>
+      <h2>Users</h2>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Blogs Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Arto Hellas</td>
+            <td>6</td>
+          </tr>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>{user.blogs.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -31,6 +71,15 @@ const App = () => {
   })
   // console.log(JSON.parse(JSON.stringify(blogsQuery)))
   const blogs = blogsQuery.data
+
+  const usersQuery = useQuery({
+    queryKey: ['users'],
+    queryFn: userService.getAll,
+    placeholderData: [],
+  })
+  console.log(JSON.parse(JSON.stringify(usersQuery)))
+  const users = usersQuery.data
+  console.log('users:', users)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -90,6 +139,10 @@ const App = () => {
           Logout
         </button>
       </p>
+      <Routes>
+        <Route path="/" />
+        <Route path="/users" element={<UsersList users={users} />}></Route>
+      </Routes>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm toggleBlogVisibility={toggleBlogVisibility} />
       </Togglable>
