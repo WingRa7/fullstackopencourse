@@ -1,16 +1,14 @@
 import { createContext, useReducer, useContext } from 'react'
 
 const blogsReducer = (state, action) => {
-  switch (action.type) {
+  switch (
+    action.type // need to review actions
+  ) {
     case 'NEW':
       return action.payload
     case 'ERROR':
       return action.payload
     case 'REMOVE':
-      return action.payload
-    case 'LOGIN':
-      return action.payload
-    case 'LOGOUT':
       return action.payload
     case 'RESET':
       return null
@@ -21,12 +19,12 @@ const blogsReducer = (state, action) => {
 
 const BlogsContext = createContext()
 
-export const useblogsValue = () => {
+export const useBlogsValue = () => {
   const blogsAndDispatch = useContext(BlogsContext)
   return blogsAndDispatch[0]
 }
 
-export const useblogsDispatch = () => {
+export const useBlogsDispatch = () => {
   const blogsAndDispatch = useContext(BlogsContext)
   return blogsAndDispatch[1]
 }

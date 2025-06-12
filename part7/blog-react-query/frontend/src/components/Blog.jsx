@@ -1,7 +1,62 @@
 import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNotificationDispatch } from '../contexts/NotificationContext'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog, processLike, processDelete, user }) => {
+const Blog = ({ blog, user }) => {
   const [visible, setVisible] = useState(false)
+
+  const queryClient = useQueryClient()
+  const dispatchNotification = useNotificationDispatch()
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: blogService.remove,
+    onSuccess: (deletedBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      const splicedBlogs = blogs
+      const blogIndex = blogs.findIndex((blog) => {
+        return blog.id === deletedBlog.id
+      })
+      splicedBlogs.splice(blogIndex, 1)
+      queryClient.setQueryData(['blogs'], splicedBlogs)
+      dispatchNotification({
+        type: 'REMOVE',
+        payload: 'Blog deleted',
+      })
+      setTimeout(() => {
+        dispatchNotification({ type: 'RESET' })
+      }, 5000)
+    },
+    onError: (error) => {
+      dispatchNotification({
+        type: 'ERROR',
+        payload: 'Blog could not be deleted',
+      })
+      setTimeout(() => {
+        dispatchNotification({ type: 'RESET' })
+      }, 5000)
+    },
+  })
+
+  const updateBlogMutation = useMutation({
+    mutationFn: blogService.update,
+    onSuccess: (updatedBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(
+        ['blogs'],
+        blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
+      )
+    },
+    onError: (error) => {
+      dispatchNotification({
+        type: 'ERROR',
+        payload: 'Like could not be added',
+      })
+      setTimeout(() => {
+        dispatchNotification({ type: 'RESET' })
+      }, 5000)
+    },
+  })
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -14,7 +69,7 @@ const Blog = ({ blog, processLike, processDelete, user }) => {
 
   const handleLike = (event) => {
     event.preventDefault()
-    processLike({
+    updateBlogMutation.mutate({
       title: blog.title,
       author: blog.author,
       url: blog.url,
@@ -26,7 +81,7 @@ const Blog = ({ blog, processLike, processDelete, user }) => {
 
   const handleDelete = (event) => {
     event.preventDefault()
-    processDelete({
+    deleteBlogMutation.mutate({
       title: blog.title,
       author: blog.author,
       url: blog.url,
