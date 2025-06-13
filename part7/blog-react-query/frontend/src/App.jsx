@@ -15,6 +15,8 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import UsersList from './components/UserList'
+import UserBlogs from './components/UserBlogs'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -30,34 +32,6 @@ import {
   useMatch,
 } from 'react-router-dom'
 import users from './services/users'
-
-const UsersList = ({ users }) => {
-  return (
-    <div>
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Blogs Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Arto Hellas</td>
-            <td>6</td>
-          </tr>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.blogs.length}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
 
 const App = () => {
   const queryClient = useQueryClient()
@@ -77,9 +51,11 @@ const App = () => {
     queryFn: userService.getAll,
     placeholderData: [],
   })
-  console.log(JSON.parse(JSON.stringify(usersQuery)))
+  // console.log(JSON.parse(JSON.stringify(usersQuery)))
   const users = usersQuery.data
-  console.log('users:', users)
+
+  const match = useMatch('/users/:id')
+  const user = match ? users.find((user) => user.id === match.params.id) : null
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -133,15 +109,20 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
       <Notification />
-      <p>
-        {userValue.name} is logged in
-        <button className="button-secondary" onClick={handleLogout}>
-          Logout
-        </button>
-      </p>
       <Routes>
-        <Route path="/" />
-        <Route path="/users" element={<UsersList users={users} />}></Route>
+        <Route
+          path="/"
+          element={
+            <p>
+              {userValue.name} is logged in
+              <button className="button-secondary" onClick={handleLogout}>
+                Logout
+              </button>
+            </p>
+          }
+        />
+        <Route path="/users" element={<UsersList users={users} />} />
+        <Route path="/users/:id" element={<UserBlogs user={user} />} />
       </Routes>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm toggleBlogVisibility={toggleBlogVisibility} />
