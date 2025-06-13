@@ -18,6 +18,7 @@ import Togglable from './components/Togglable'
 import UsersList from './components/UserList'
 import UserBlogs from './components/UserBlogs'
 import BlogView from './components/BlogView'
+import Menu from './components/Menu'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -83,21 +84,6 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    dispatchUser({
-      type: 'LOGOUT',
-      payload: null,
-    })
-    dispatchNotification({
-      type: 'LOGOUT',
-      payload: 'Logged out successfully',
-    })
-    setTimeout(() => {
-      dispatchNotification({ type: 'RESET' })
-    }, 5000)
-  }
-
   if (blogsQuery.isLoading) {
     return <div>loading data...</div>
   }
@@ -116,13 +102,9 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
+      <Menu />
       <Notification />
-      <p>
-        {userValue.name} is logged in
-        <button className="button-secondary" onClick={handleLogout}>
-          Logout
-        </button>
-      </p>
+
       <Routes>
         <Route
           path="/"
