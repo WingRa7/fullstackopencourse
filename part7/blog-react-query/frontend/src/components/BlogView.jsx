@@ -113,6 +113,10 @@ const BlogView = ({ blog, user }) => {
           Remove
         </button>
       )}
+      <h3>Comments</h3>
+      {blog.comments.map((comment) => (
+        <li key={comment._id}>{comment.body}</li>
+      ))}
     </div>
   )
 }

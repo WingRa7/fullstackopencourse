@@ -2,7 +2,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-
 const initialUsers = [
   {
     _id: '6815cbc4b39dcf5e3173e14c',
@@ -10,7 +9,7 @@ const initialUsers = [
     name: 'Michael Chan',
     passwordHash: 'VG9yb250bw==', // Toronto
     blogs: [],
-    __v: 0
+    __v: 0,
   },
   {
     _id: '6815cbd03541066cad1523a6',
@@ -18,7 +17,7 @@ const initialUsers = [
     name: 'Edsger W. Dijkstra',
     passwordHash: 'QnJpc3RvbA==', // Bristol
     blogs: [],
-    __v: 0
+    __v: 0,
   },
   {
     _id: '6815cbe20229df171e0a1db9',
@@ -26,7 +25,7 @@ const initialUsers = [
     name: 'Robert C. Martin',
     passwordHash: 'TG9uZG9u', // London
     blogs: [],
-    __v: 0
+    __v: 0,
   },
   {
     _id: '6815df37029bd474200287d2',
@@ -34,8 +33,8 @@ const initialUsers = [
     name: 'Lenny Carrots',
     passwordHash: 'Q2hpY2Fnbw==', // Chicago
     blogs: [],
-    __v: 0
-  }
+    __v: 0,
+  },
 ]
 
 const initialBlogs = [
@@ -46,7 +45,7 @@ const initialBlogs = [
     url: 'https://reactpatterns.com/',
     likes: 7,
     user: '6815cbc4b39dcf5e3173e14c',
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422aa71b54a676234d17f8',
@@ -55,7 +54,7 @@ const initialBlogs = [
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
     user: '6815cbd03541066cad1523a6',
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422b3a1b54a676234d17f9',
@@ -64,7 +63,7 @@ const initialBlogs = [
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 12,
     user: '6815cbd03541066cad1523a6',
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422b891b54a676234d17fa',
@@ -73,7 +72,7 @@ const initialBlogs = [
     url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
     likes: 10,
     user: '6815cbe20229df171e0a1db9',
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422ba71b54a676234d17fb',
@@ -82,7 +81,7 @@ const initialBlogs = [
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
     user: '6815cbe20229df171e0a1db9',
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422bc61b54a676234d17fc',
@@ -91,7 +90,7 @@ const initialBlogs = [
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
     user: '6815cbe20229df171e0a1db9',
-    __v: 0
+    __v: 0,
   },
   {
     _id: '682199d34e9d52d8aba48199',
@@ -100,36 +99,37 @@ const initialBlogs = [
     url: 'http://uselessblogs.com/blogs/deleted',
     likes: 5,
     user: '6815df37029bd474200287d2',
-    __v: 0
-  }
+    __v: 0,
+  },
 ]
 
 const initialToken = () => {
-
   const userForToken = {
     username: 'lenny59',
     id: '6815df37029bd474200287d2',
   }
 
-  const token = jwt.sign(
-    userForToken,
-    process.env.SECRET,
-    { expiresIn: 60*60 }
-  )
+  const token = jwt.sign(userForToken, process.env.SECRET, {
+    expiresIn: 60 * 60,
+  })
 
   return token
 }
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
-  return blogs.map(blog => blog.toJSON())
+  return blogs.map((blog) => blog.toJSON())
 }
 
 const usersInDb = async () => {
   const users = await User.find({})
-  return users.map(user => user.toJSON())
+  return users.map((user) => user.toJSON())
 }
 
 module.exports = {
-  initialBlogs, initialUsers, initialToken, blogsInDb, usersInDb
+  initialBlogs,
+  initialUsers,
+  initialToken,
+  blogsInDb,
+  usersInDb,
 }

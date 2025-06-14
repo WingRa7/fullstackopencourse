@@ -176,6 +176,17 @@ button:focus:not(:focus-visible) {
   border-color: var(--color-border-notification-success);
 }
 
+.menu {
+  background-color: var(--color-white);
+  border: var(--size-border-width-sm) solid var(--color-grey-dark);
+  box-shadow: 0 4px 8px 4px var(--color-shadow-dark);
+  padding: var(--space-xxs);
+  margin-bottom: var(--space-sm);
+  margin-top: var(--space-sm);
+  border-radius: var(--size-radius-md);
+  color: var(--color-black);
+}
+
 .blog {
   background-color: var(--color-white);
   border: var(--size-border-width-sm) solid var(--color-grey-light);

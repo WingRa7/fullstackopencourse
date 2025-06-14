@@ -27,7 +27,7 @@ const Menu = () => {
   }
 
   return (
-    <div style={{ backgroundColor: 'lightgrey' }}>
+    <div className="menu">
       <p>
         <Link style={padding} to="/">
           Blogs

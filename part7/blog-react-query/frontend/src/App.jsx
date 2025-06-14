@@ -47,6 +47,7 @@ const App = () => {
   })
   // console.log(JSON.parse(JSON.stringify(blogsQuery)))
   const blogs = blogsQuery.data
+  console.log('blogs:', blogs)
 
   const usersQuery = useQuery({
     queryKey: ['users'],

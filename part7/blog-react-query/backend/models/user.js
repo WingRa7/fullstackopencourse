@@ -12,22 +12,22 @@ const userSchema = mongoose.Schema({
     unique: true,
     validate: {
       validator: isUsernameLength,
-      message: 'Username must be atleast 3 characters long' // also implemented on controller
-    }
+      message: 'Username must be atleast 3 characters long', // also implemented on controller
+    },
   },
   name: {
     type: String,
-    required: [true, 'Name is required']
+    required: [true, 'Name is required'],
   },
   passwordHash: {
     type: String,
-    required: true //can't handle validation here
+    required: true, //can't handle validation here
   },
   blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Blog'
-    }
+      ref: 'Blog',
+    },
   ],
 })
 
@@ -38,7 +38,7 @@ userSchema.set('toJSON', {
     delete returnedObject.__v
     // the passwordHash should not be revealed
     delete returnedObject.passwordHash
-  }
+  },
 })
 
-module.exports =  mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema)
