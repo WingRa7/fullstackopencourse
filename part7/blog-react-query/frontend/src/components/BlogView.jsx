@@ -1,10 +1,33 @@
+import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../contexts/NotificationContext'
 import blogService from '../services/blogs'
 
 const BlogView = ({ blog, user }) => {
+  const [newComment, setNewComment] = useState('')
+
   const queryClient = useQueryClient()
   const dispatchNotification = useNotificationDispatch()
+
+  const updateBlogMutation = useMutation({
+    mutationFn: blogService.update,
+    onSuccess: (updatedBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(
+        ['blogs'],
+        blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
+      )
+    },
+    onError: (error) => {
+      dispatchNotification({
+        type: 'ERROR',
+        payload: 'Like could not be added',
+      })
+      setTimeout(() => {
+        dispatchNotification({ type: 'RESET' })
+      }, 5000)
+    },
+  })
 
   const deleteBlogMutation = useMutation({
     mutationFn: blogService.remove,
@@ -35,19 +58,27 @@ const BlogView = ({ blog, user }) => {
     },
   })
 
-  const updateBlogMutation = useMutation({
-    mutationFn: blogService.update,
+  const newCommentMutation = useMutation({
+    mutationFn: blogService.createComment,
     onSuccess: (updatedBlog) => {
+      console.log('updatedBlog:', updatedBlog)
       const blogs = queryClient.getQueryData(['blogs'])
       queryClient.setQueryData(
         ['blogs'],
         blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog))
       )
+      dispatchNotification({
+        type: 'NEW',
+        payload: 'comment added',
+      })
+      setTimeout(() => {
+        dispatchNotification({ type: 'RESET' })
+      }, 5000)
     },
-    onError: (error) => {
+    onError: (error, variables) => {
       dispatchNotification({
         type: 'ERROR',
-        payload: 'Like could not be added',
+        payload: 'could not add comment',
       })
       setTimeout(() => {
         dispatchNotification({ type: 'RESET' })
@@ -79,7 +110,16 @@ const BlogView = ({ blog, user }) => {
     })
   }
 
-  const isUsersBlog = blog ? blog.user.username === user.username : false // can reference username in context rather than passed prop.
+  const addComment = (event) => {
+    event.preventDefault()
+    newCommentMutation.mutate({
+      body: newComment,
+      id: blog.id,
+    })
+    setNewComment('')
+  }
+
+  const isUsersBlog = blog ? blog.user.username === user.username : false
 
   if (!blog) {
     return null
@@ -114,6 +154,20 @@ const BlogView = ({ blog, user }) => {
         </button>
       )}
       <h3>Comments</h3>
+      <form className="blogform" onSubmit={addComment}>
+        {/* change styling */}
+        <div>
+          <input
+            type="text"
+            value={newComment}
+            name="Author"
+            onChange={(event) => setNewComment(event.target.value)}
+          />
+          <button className="button-primary" type="submit">
+            Add comment
+          </button>
+        </div>
+      </form>
       {blog.comments.map((comment) => (
         <li key={comment._id}>{comment.body}</li>
       ))}
