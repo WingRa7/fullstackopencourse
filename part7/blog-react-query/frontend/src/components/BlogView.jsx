@@ -1,3 +1,22 @@
+import {
+  Container,
+  Typography,
+  Box,
+  CircularProgress,
+  Chip,
+  Card,
+  Paper,
+  Button,
+  Link,
+  TextField,
+  List,
+  ListItem,
+} from '@mui/material'
+
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
+import DeleteIcon from '@mui/icons-material/Delete'
+
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../contexts/NotificationContext'
@@ -126,52 +145,109 @@ const BlogView = ({ blog, user }) => {
   }
 
   return (
-    <div>
-      <h2>{blog.title}</h2>
-      <p>
-        <a href={blog.url} target="_blank" rel="noopener noreferrer">
-          {blog.url}
-        </a>
-      </p>
-      <p data-testid="likes">
-        Likes {blog.likes}
-        <button
-          className="button-primary like"
-          data-testid="likeButton"
-          onClick={handleLike}
-        >
-          Like
-        </button>
-      </p>
-      <p>added by {blog.author}</p>
-      {isUsersBlog && (
-        <button
-          className="button-secondary remove"
-          data-testid="removeButton"
-          onClick={handleDelete}
-        >
-          Remove
-        </button>
-      )}
-      <h3>Comments</h3>
-      <form className="blogform" onSubmit={addComment}>
-        {/* change styling */}
-        <div>
-          <input
-            type="text"
-            value={newComment}
-            name="Author"
-            onChange={(event) => setNewComment(event.target.value)}
-          />
-          <button className="button-primary" type="submit">
-            Add comment
-          </button>
-        </div>
-      </form>
-      {blog.comments.map((comment) => (
-        <li key={comment._id}>{comment.body}</li>
-      ))}
-    </div>
+    <Paper>
+      <Box
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 4, my: 4 }}
+      >
+        <Typography variant="h4">{blog.title}</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+          <Link
+            href={
+              blog.url.startsWith('http://') || blog.url.startsWith('https://')
+                ? blog.url
+                : `https://${blog.url}`
+            }
+            underline="none"
+            sx={{
+              color: 'inherit',
+              textDecoration: 'none',
+              '&:hover': {
+                color: 'primary.dark',
+              },
+            }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {blog.url}
+          </Link>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
+            <Typography data-testid="likes">Likes {blog.likes}</Typography>
+            <Button
+              size="small"
+              startIcon={<ThumbUpIcon />}
+              data-testid="likeButton"
+              onClick={handleLike}
+            >
+              Like
+            </Button>
+          </Box>
+          <Typography>Added by {blog.author}</Typography>
+        </Box>
+
+        {isUsersBlog && (
+          <Box>
+            <Button
+              size="small"
+              startIcon={<DeleteIcon />}
+              color="error"
+              data-testid="removeButton"
+              onClick={handleDelete}
+            >
+              Remove
+            </Button>
+          </Box>
+        )}
+        <Box>
+          <form onSubmit={addComment}>
+            <Typography variant="h6">Comments</Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 2,
+                my: 1,
+              }}
+            >
+              <TextField
+                label="Comment"
+                size="small"
+                sx={{ m: 0 }}
+                autoComplete="off"
+                type="text"
+                value={newComment}
+                name="Author"
+                onChange={(event) => setNewComment(event.target.value)}
+              />
+              <Button type="submit">Add comment</Button>
+            </Box>
+          </form>
+          <List>
+            {blog.comments.map((comment) => (
+              <Box
+                key={comment._id}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  my: 1,
+                }}
+              >
+                <ChatBubbleOutlineIcon />
+                <ListItem>{comment.body}</ListItem>
+              </Box>
+            ))}
+          </List>
+        </Box>
+      </Box>
+    </Paper>
   )
 }
 

@@ -1,3 +1,14 @@
+import {
+  Typography,
+  Container,
+  TextField,
+  Button,
+  Paper,
+  Box,
+} from '@mui/material'
+
+import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined'
+
 import { useState, useRef } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../contexts/NotificationContext'
@@ -64,31 +75,51 @@ const LoginForm = () => {
   }
 
   return (
-    <div>
-      <form className="loginform" onSubmit={handleLogin}>
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <button className="button-primary" type="submit">
-          Login
-        </button>
-      </form>
-    </div>
+    <Container maxWidth="xs">
+      <Paper>
+        <Box sx={{ display: 'flex', flexDirection: 'column', p: 6, my: 10 }}>
+          <form onSubmit={handleLogin}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: '0.35em',
+              }}
+            >
+              <AutoStoriesOutlinedIcon fontSize="large" sx={{ mr: 1 }} />
+              <Typography variant="h3">Blogs</Typography>
+            </Box>
+            <Typography variant="h5" gutterBottom>
+              Log in to application
+            </Typography>
+            <Box>
+              <TextField
+                fullWidth
+                label="Username"
+                type="username"
+                value={username}
+                name="Username"
+                onChange={(event) => setUsername(event.target.value)}
+              />
+            </Box>
+            <Box>
+              <TextField
+                fullWidth
+                label="Password"
+                type="password"
+                value={password}
+                name="Password"
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </Box>
+            <Button variant="contained" sx={{ mt: 2 }} type="submit">
+              Login
+            </Button>
+          </form>
+        </Box>
+      </Paper>
+    </Container>
   )
 }
 

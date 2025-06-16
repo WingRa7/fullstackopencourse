@@ -1,14 +1,35 @@
-import { Link } from 'react-router-dom'
+import { Typography, Card, CardContent } from '@mui/material'
+import { Link as RouterLink } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
+  console.log(blog)
   return (
-    <div className="blog">
-      <h3 data-testid="title">
-        <Link to={`/blogs/${blog.id}`}>
-          {blog.title} {blog.author}
-        </Link>
-      </h3>
-    </div>
+    <Card
+      sx={{
+        midWidth: 275,
+        borderBottom: 8,
+        borderBottomColor: 'secondary.light',
+      }}
+    >
+      <CardContent>
+        <Typography
+          variant="h6"
+          data-testid="title"
+          component={RouterLink}
+          to={`/blogs/${blog.id}`}
+          sx={{
+            color: 'inherit',
+            textDecoration: 'none',
+            '&:hover': {
+              color: 'primary.dark',
+            },
+          }}
+        >
+          {blog.title}
+        </Typography>
+        <Typography>{blog.author}</Typography>
+      </CardContent>
+    </Card>
   )
 }
 

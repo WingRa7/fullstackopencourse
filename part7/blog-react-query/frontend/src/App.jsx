@@ -1,4 +1,12 @@
 import {
+  Container,
+  Typography,
+  Box,
+  CircularProgress,
+  Chip,
+} from '@mui/material'
+
+import {
   useQuery,
   useMutation,
   useQueryClient,
@@ -7,8 +15,9 @@ import {
 import { useNotificationDispatch } from './contexts/NotificationContext'
 import { useUserDispatch, useUserValue } from './contexts/UserContext'
 
+import './App.css'
+
 import { useEffect, useRef } from 'react'
-import './index.css'
 
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -18,7 +27,7 @@ import Togglable from './components/Togglable'
 import UsersList from './components/UserList'
 import UserBlogs from './components/UserBlogs'
 import BlogView from './components/BlogView'
-import Menu from './components/Menu'
+import Navbar from './components/Navbar'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -85,50 +94,93 @@ const App = () => {
   }
 
   if (blogsQuery.isLoading) {
-    return <div>loading data...</div>
+    return (
+      <Container>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
+          }}
+        >
+          <CircularProgress />
+          <Typography>loading data...</Typography>
+        </Box>
+      </Container>
+    )
   }
 
   if (userValue === null) {
     return (
-      <div>
-        <h1>Blogs</h1>
-        <h2>Log in to application</h2>
-        <Notification />
-        <LoginForm />
-      </div>
+      <Container>
+        <Box>
+          <Notification
+            sx={{
+              position: 'fixed',
+              top: 20,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 1000,
+              width: 'auto',
+            }}
+          />
+          <LoginForm />
+        </Box>
+      </Container>
     )
   }
 
   return (
-    <div>
-      <h1>Blogs</h1>
-      <Menu />
-      <Notification />
+    <>
+      <Navbar />
+      <Container>
+        <Notification
+          sx={{
+            position: 'fixed',
+            top: 40,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            width: 'auto',
+          }}
+        />
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              <Togglable buttonLabel="new blog" ref={blogFormRef}>
-                <BlogForm toggleBlogVisibility={toggleBlogVisibility} />
-              </Togglable>
-              {blogs
-                .sort((a, b) => b.likes - a.likes)
-                .map((blog) => (
-                  <Blog key={blog.id} blog={blog} />
-                ))}
-            </div>
-          }
-        />
-        <Route path="/users" element={<UsersList users={users} />} />
-        <Route path="/users/:id" element={<UserBlogs user={user} />} />
-        <Route
-          path="/blogs/:id"
-          element={<BlogView blog={blog} user={userValue} />}
-        />
-      </Routes>
-    </div>
+        <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          <BlogForm toggleBlogVisibility={toggleBlogVisibility} />
+        </Togglable>
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns:
+                    'repeat(auto-fill, minmax(min(300px, 100%), 1fr))',
+                  gap: 4,
+                  m: 4,
+                }}
+              >
+                {blogs
+                  .sort((a, b) => b.likes - a.likes)
+                  .map((blog) => (
+                    <Blog key={blog.id} blog={blog} />
+                  ))}
+              </Box>
+            }
+          />
+          <Route path="/users" element={<UsersList users={users} />} />
+          <Route path="/users/:id" element={<UserBlogs user={user} />} />
+          <Route
+            path="/blogs/:id"
+            element={<BlogView blog={blog} user={userValue} />}
+          />
+        </Routes>
+      </Container>
+    </>
   )
 }
 

@@ -1,18 +1,24 @@
+import { Container, Typography, Box, List, ListItem } from '@mui/material'
+
+import { Link as RouterLink } from 'react-router-dom'
+
 const UserBlogs = ({ user }) => {
   if (!user) {
     return null
   }
 
   return (
-    <div>
-      <h2>{user.name}</h2>
-      <h3>added blogs</h3>
-      <ul>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2, m: 2 }}>
+      <Box>
+        <Typography variant="h5">{user.name}</Typography>
+        <Typography variant="h6">added blogs</Typography>
+      </Box>
+      <List>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <ListItem key={blog.id}>{blog.title}</ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Box>
   )
 }
 

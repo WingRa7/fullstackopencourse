@@ -1,3 +1,21 @@
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Button,
+  Paper,
+  TextField,
+  Tooltip,
+  MenuItem,
+  Link,
+  Stack,
+} from '@mui/material'
+
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../contexts/NotificationContext'
@@ -50,41 +68,53 @@ const BlogForm = ({ toggleBlogVisibility }) => {
   }
 
   return (
-    <div>
-      <form className="blogform" onSubmit={addBlog}>
-        <h2>Create new blog</h2>
-        <div>
-          <label>Title</label>
-          <input
-            type="text"
-            value={newTitle}
-            name="Title"
-            onChange={(event) => setNewTitle(event.target.value)}
-          />
-        </div>
-        <div>
-          <label>Author</label>
-          <input
-            type="text"
-            value={newAuthor}
-            name="Author"
-            onChange={(event) => setNewAuthor(event.target.value)}
-          />
-        </div>
-        <div>
-          <label>URL</label>
-          <input
-            type="text"
-            value={newUrl}
-            name="Url"
-            onChange={(event) => setNewUrl(event.target.value)}
-          />
-        </div>
-        <button className="button-primary" type="submit">
-          Create
-        </button>
-      </form>
-    </div>
+    <Container maxWidth="xs">
+      <Paper>
+        <Box sx={{ display: 'flex', flexDirection: 'column', p: 4, my: 4 }}>
+          <form onSubmit={addBlog}>
+            <Typography variant="h5" gutterBottom>
+              Create new blog
+            </Typography>
+            <Box>
+              <TextField
+                fullWidth
+                label="Title"
+                type="text"
+                value={newTitle}
+                name="Title"
+                autoComplete="off"
+                onChange={(event) => setNewTitle(event.target.value)}
+              />
+            </Box>
+            <Box>
+              <TextField
+                fullWidth
+                label="Author"
+                type="text"
+                value={newAuthor}
+                name="Author"
+                autoComplete="off"
+                onChange={(event) => setNewAuthor(event.target.value)}
+              />
+            </Box>
+            <Box>
+              <TextField
+                fullWidth
+                label="URL"
+                type="text"
+                value={newUrl}
+                name="Url"
+                autoComplete="off"
+                onChange={(event) => setNewUrl(event.target.value)}
+              />
+            </Box>
+            <Button type="submit" sx={{ mt: 2 }}>
+              Create
+            </Button>
+          </form>
+        </Box>
+      </Paper>
+    </Container>
   )
 }
 
