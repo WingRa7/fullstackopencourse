@@ -84,7 +84,7 @@ describe('when there is initially some users and blogs saved', () => {
 
     await api
       .post('/api/blogs')
-      .set('Authorization', helper.initialToken())
+      .set('Authorization', `Bearer ${helper.initialToken()}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -136,7 +136,7 @@ describe('when there is initially some users and blogs saved', () => {
 
       await api
         .post('/api/blogs')
-        .set('Authorization', helper.initialToken())
+        .set('Authorization', `Bearer ${helper.initialToken()}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -158,7 +158,7 @@ describe('when there is initially some users and blogs saved', () => {
 
       await api
         .post('/api/blogs')
-        .set('Authorization', helper.initialToken())
+        .set('Authorization', `Bearer ${helper.initialToken()}`)
         .send(newBlog)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -174,7 +174,7 @@ describe('when there is initially some users and blogs saved', () => {
 
       await api
         .post('/api/blogs')
-        .set('Authorization', helper.initialToken())
+        .set('Authorization', `Bearer ${helper.initialToken()}`)
         .send(newBlog)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -190,7 +190,7 @@ describe('when there is initially some users and blogs saved', () => {
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
-        .set('Authorization', helper.initialToken())
+        .set('Authorization', `Bearer ${helper.initialToken()}`)
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
@@ -215,7 +215,7 @@ describe('when there is initially some users and blogs saved', () => {
 
       await api
         .put(`/api/blogs/${blogToUpdate.id}`)
-        .set('Authorization', helper.initialToken())
+        .set('Authorization', `Bearer ${helper.initialToken()}`)
         .send(updatedBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
