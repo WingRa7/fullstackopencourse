@@ -105,8 +105,8 @@ type Author {
 type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String!): [Book!]!
-    allAuthors: [Author]!
+    allBooks(author: String): [Book!]!
+    allAuthors: [Author!]!
   }
 `;
 
