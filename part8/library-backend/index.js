@@ -149,6 +149,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
+      console.log(args);
       const book = { ...args, id: uuid() };
       books = books.concat(book);
       const authorFound = authors.find((author) => author.name === args.author);
