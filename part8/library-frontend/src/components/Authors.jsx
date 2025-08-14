@@ -31,7 +31,6 @@ const Authors = () => {
       variables: { name: selectedOption.value, born: parseInt(born) },
     });
 
-    // setSelectedOption(null);
     setBorn("");
   };
 

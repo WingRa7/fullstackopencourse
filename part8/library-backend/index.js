@@ -158,7 +158,12 @@ const resolvers = {
         authorDocument = await Author.findOne({ name: args.author });
 
         if (!authorDocument) {
-          throw new GraphQLError("author not found in database");
+          throw new GraphQLError("Matching author not found in database", {
+            extensions: {
+              code: "INTERNAL_SERVER_ERROR",
+              error,
+            },
+          });
         }
       }
 
@@ -170,12 +175,6 @@ const resolvers = {
       if (args.genre) {
         bookQuery.genres = args.genre;
       }
-
-      // const byAuthor = (book) =>
-      //   !args.author ? true : book.author === authorDocument._id;
-      // const byGenre = (book) =>
-      //   !args.genre ? true : book.genres.includes(args.genre);
-      // const books = books.filter((book) => byAuthor(book) && byGenre(book)); // mongoose .method + ({ key: value, key: value})
 
       const books = await Book.find(bookQuery).populate("author");
 
@@ -194,35 +193,60 @@ const resolvers = {
       const result = await Author.findOne({ name: args.author });
       if (!result) {
         const newAuthor = new Author({ name: args.author, born: null });
-        await newAuthor.save();
+        await newAuthor.save().catch((error) => {
+          throw new GraphQLError("Creating new book author failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args.name,
+              error,
+            },
+          });
+        });
         const book = new Book({ ...args, author: newAuthor._id });
-        const savedBook = await book.save();
+        const savedBook = await book.save().catch((error) => {
+          throw new GraphQLError("Creating new book failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args,
+              error,
+            },
+          });
+        });
         const populatedBook = await savedBook.populate("author");
         return populatedBook;
       } else {
         const book = new Book({ ...args, author: result._id });
-        const savedBook = await book.save();
+        const savedBook = await book.save().catch((error) => {
+          throw new GraphQLError("Creating new book failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args,
+              error,
+            },
+          });
+        });
         const populatedBook = await savedBook.populate("author");
         return populatedBook;
       }
     },
     editAuthor: (root, args) => {
-      // 8.13 no need to work
-      const authorFound = authors.find((author) => author.name === args.name);
-      if (!authorFound) {
-        return null;
-      }
-      const updatedAuthors = authors.map((author) =>
-        author.name === authorFound.name
-          ? { ...author, born: args.setBornTo }
-          : author
-      );
-      authors = updatedAuthors;
-      const updatedAuthor = authors.find(
-        (author) => author.name === authorFound.name
-      );
+      console.log("editAuthor args:", args);
 
-      return updatedAuthor;
+      const authorUpdate = Author.findOneAndUpdate(
+        { name: args.name },
+        { born: args.setBornTo },
+        { returnDocument: "after", runValidators: true }
+      ).catch((error) => {
+        throw new GraphQLError("Updating author failed", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args,
+            error,
+          },
+        });
+      });
+
+      return authorUpdate;
     },
   },
 };
