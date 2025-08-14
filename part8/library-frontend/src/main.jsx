@@ -19,7 +19,10 @@ const query = gql`
     allBooks {
       title
       published
-      author
+      author {
+        name
+        born
+      }
       id
       genres
     }

@@ -1,6 +1,27 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const { v1: uuid } = require("uuid");
+const { GraphQLError } = require("graphql");
+
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const Book = require("./models/book");
+const Author = require("./models/author");
+
+require("dotenv").config();
+
+const MONGODB_URI = process.env.MONGODB_URI;
+
+console.log("connecting to", MONGODB_URI);
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("connected to MongoDB");
+  })
+  .catch((error) => {
+    console.log("error connection to MongoDB:", error.message);
+  });
 
 let authors = [
   {
@@ -91,9 +112,9 @@ const typeDefs = `
 type Book {
   title: String!
   published: Int!
-  author: String!
-  id: ID!
+  author: Author!
   genres: [String!]
+  id: ID!
   }
 
 type Author {
@@ -115,8 +136,8 @@ type Mutation {
     title: String!
     author: String!
     published: Int!
-    genres: [String!]
-  ): Book
+    genres: [String!]!
+  ): Book!
   editAuthor(
     name: String!
     setBornTo: Int!
@@ -126,20 +147,41 @@ type Mutation {
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      if (!args.author && !args.genre) {
-        return books;
-      }
-      const byAuthor = (book) =>
-        !args.author ? true : book.author === args.author;
-      const byGenre = (book) =>
-        !args.genre ? true : book.genres.includes(args.genre);
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
+    allBooks: async (root, args) => {
+      console.log("args:", args);
 
-      return books.filter((book) => byAuthor(book) && byGenre(book));
+      let authorDocument = null;
+
+      if (args.author) {
+        authorDocument = await Author.findOne({ name: args.author });
+
+        if (!authorDocument) {
+          throw new GraphQLError("author not found in database");
+        }
+      }
+
+      const bookQuery = {};
+
+      if (args.author) {
+        bookQuery.author = authorDocument._id;
+      }
+      if (args.genre) {
+        bookQuery.genres = args.genre;
+      }
+
+      // const byAuthor = (book) =>
+      //   !args.author ? true : book.author === authorDocument._id;
+      // const byGenre = (book) =>
+      //   !args.genre ? true : book.genres.includes(args.genre);
+      // const books = books.filter((book) => byAuthor(book) && byGenre(book)); // mongoose .method + ({ key: value, key: value})
+
+      const books = await Book.find(bookQuery).populate("author");
+
+      return books;
     },
-    allAuthors: () => authors,
+    allAuthors: async () => Author.find({}),
   },
   Author: {
     bookCount: (root) => {
@@ -148,22 +190,24 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: (root, args) => {
-      console.log(args);
-      const book = { ...args, id: uuid() };
-      books = books.concat(book);
-      const authorFound = authors.find((author) => author.name === args.author);
-      !authorFound
-        ? (authors = authors.concat({
-            name: args.author,
-            born: null,
-            id: uuid(),
-          }))
-        : authors;
-
-      return book;
+    addBook: async (root, args) => {
+      const result = await Author.findOne({ name: args.author });
+      if (!result) {
+        const newAuthor = new Author({ name: args.author, born: null });
+        await newAuthor.save();
+        const book = new Book({ ...args, author: newAuthor._id });
+        const savedBook = await book.save();
+        const populatedBook = await savedBook.populate("author");
+        return populatedBook;
+      } else {
+        const book = new Book({ ...args, author: result._id });
+        const savedBook = await book.save();
+        const populatedBook = await savedBook.populate("author");
+        return populatedBook;
+      }
     },
     editAuthor: (root, args) => {
+      // 8.13 no need to work
       const authorFound = authors.find((author) => author.name === args.name);
       if (!authorFound) {
         return null;
