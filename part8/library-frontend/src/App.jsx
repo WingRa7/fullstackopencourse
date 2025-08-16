@@ -82,9 +82,6 @@ const App = () => {
           <Link style={padding} to="/add">
             <button>Add Book</button>
           </Link>
-          <Link style={padding} to="/login">
-            <button>Login</button>
-          </Link>
           <button onClick={logout}>logout</button>
         </div>
 
@@ -93,10 +90,6 @@ const App = () => {
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
           <Route path="/add" element={<NewBook />} />
-          <Route
-            path="/login"
-            element={<LoginForm setToken={setToken} setError={notify} />}
-          />
         </Routes>
       </div>
     </Router>
