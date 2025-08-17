@@ -1,7 +1,11 @@
 import { useQuery } from "@apollo/client";
 import { ALL_BOOKS } from "../queries";
 
+import { useState } from "react";
+
 const Books = () => {
+  const [genre, setGenre] = useState(null);
+
   const result = useQuery(ALL_BOOKS);
 
   if (result.loading) {
@@ -9,6 +13,24 @@ const Books = () => {
   }
 
   const books = result.data.allBooks;
+  const flatGenresArr = result.data.allBooks.flatMap((book) => book.genres);
+  const genresUnique = flatGenresArr.reduce((acc, value) => {
+    if (!acc.includes(value)) {
+      acc.push(value);
+    }
+    return acc;
+  }, []);
+
+  const bookList = books.filter((book) => {
+    if (genre) {
+      return book.genres.includes(genre);
+    }
+    return book;
+  });
+
+  const handleGenreFilter = (g) => {
+    setGenre(g);
+  };
 
   return (
     <div>
@@ -21,7 +43,7 @@ const Books = () => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map((a) => (
+          {bookList.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -30,6 +52,12 @@ const Books = () => {
           ))}
         </tbody>
       </table>
+      {genresUnique.map((g) => (
+        <button key={g} onClick={() => handleGenreFilter(g)}>
+          {g}
+        </button>
+      ))}
+      <button onClick={() => setGenre(null)}>all genres</button>
     </div>
   );
 };
