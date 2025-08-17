@@ -21,12 +21,11 @@ const Books = () => {
     return acc;
   }, []);
 
-  const bookList = books.filter((book) => {
-    if (genre) {
-      return book.genres.includes(genre);
-    }
-    return book;
-  });
+  let bookList = books;
+
+  if (genre) {
+    bookList = books.filter((book) => book.genres.includes(genre));
+  }
 
   const handleGenreFilter = (g) => {
     setGenre(g);
@@ -35,6 +34,10 @@ const Books = () => {
   return (
     <div>
       <h2>books</h2>
+
+      <p>
+        in genre <strong>{genre}</strong>
+      </p>
 
       <table>
         <tbody>

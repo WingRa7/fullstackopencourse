@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { LOGIN } from "../queries";
 
 const padding = {
   padding: 10,
 };
 
-const LoginForm = ({ setError, setToken }) => {
+const LoginForm = ({ setError, setToken, token }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -29,6 +29,14 @@ const LoginForm = ({ setError, setToken }) => {
 
     login({ variables: { username, password } });
   };
+
+  if (token) {
+    return (
+      <div style={padding}>
+        <p>Logged in</p>
+      </div>
+    );
+  }
 
   return (
     <div>

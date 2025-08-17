@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
+import Recommend from "./components/Recommend";
 import LoginForm from "./components/LoginForm";
 import Notify from "./components/Notify";
 
@@ -61,8 +62,15 @@ const App = () => {
             <Route path="/books" element={<Books />} />
             <Route
               path="/login"
-              element={<LoginForm setToken={setToken} setError={notify} />}
+              element={
+                <LoginForm
+                  token={token}
+                  setToken={setToken}
+                  setError={notify}
+                />
+              }
             />
+            <Route path="/recommend" element={<Recommend />} />
           </Routes>
         </div>
       </Router>
@@ -82,7 +90,12 @@ const App = () => {
           <Link style={padding} to="/add">
             <button>Add Book</button>
           </Link>
-          <button onClick={logout}>logout</button>
+          <Link style={padding} to="/recommend">
+            <button>Recommend</button>
+          </Link>
+          <Link style={padding} to="/authors">
+            <button onClick={logout}>logout</button>
+          </Link>
         </div>
 
         <Routes>
@@ -90,6 +103,13 @@ const App = () => {
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
           <Route path="/add" element={<NewBook />} />
+          <Route
+            path="/login"
+            element={
+              <LoginForm token={token} setToken={setToken} setError={notify} />
+            }
+          />
+          <Route path="/recommend" element={<Recommend />} />
         </Routes>
       </div>
     </Router>
