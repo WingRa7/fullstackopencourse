@@ -1,12 +1,16 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { ALL_BOOKS } from "../queries";
 
 import { useState } from "react";
 
 const Books = () => {
   const [genre, setGenre] = useState(null);
+  const [getGenreBooks, { loading, error, data }] = useLazyQuery(ALL_BOOKS);
 
   const result = useQuery(ALL_BOOKS);
+
+  if (loading) return <p>loading</p>;
+  if (error) return <p>error: {error}</p>;
 
   if (result.loading) {
     return <div>loading...</div>;
@@ -21,15 +25,13 @@ const Books = () => {
     return acc;
   }, []);
 
-  let bookList = books;
+  let bookList = null;
 
-  if (genre) {
-    bookList = books.filter((book) => book.genres.includes(genre));
+  if (genre && data) {
+    bookList = data.allBooks;
+  } else {
+    bookList = books;
   }
-
-  const handleGenreFilter = (g) => {
-    setGenre(g);
-  };
 
   return (
     <div>
@@ -55,9 +57,15 @@ const Books = () => {
           ))}
         </tbody>
       </table>
-      {genresUnique.map((g) => (
-        <button key={g} onClick={() => handleGenreFilter(g)}>
-          {g}
+      {genresUnique.map((genre) => (
+        <button
+          key={genre}
+          onClick={() => {
+            setGenre(genre);
+            getGenreBooks({ variables: { genre: genre } });
+          }}
+        >
+          {genre}
         </button>
       ))}
       <button onClick={() => setGenre(null)}>all genres</button>
