@@ -13,8 +13,6 @@ const Recommend = () => {
   const result = useQuery(ALL_BOOKS);
   const resultUser = useQuery(ME);
 
-  console.log(result.data);
-
   useEffect(() => {
     if (resultUser.data) setGenre(resultUser.data.me.favoriteGenre);
   }, [resultUser.data]);
