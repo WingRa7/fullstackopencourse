@@ -8,7 +8,8 @@ import Recommend from "./components/Recommend";
 import LoginForm from "./components/LoginForm";
 import Notify from "./components/Notify";
 
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useSubscription } from "@apollo/client";
+import { BOOK_ADDED } from "./queries";
 
 const padding = {
   padding: 5,
@@ -18,6 +19,14 @@ const App = () => {
   const [token, setToken] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const client = useApolloClient();
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      window.alert(`Book Added`);
+      console.log(data.data.bookAdded);
+    },
+    onError: (error) => console.error("subsciption error", error),
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("library-user-token");

@@ -86,6 +86,7 @@ const resolvers = {
           });
         });
         const populatedBook = await savedBook.populate("author");
+        pubsub.publish("BOOK_ADDED", { bookAdded: populatedBook });
         return populatedBook;
       } else {
         const book = new Book({ ...args, author: result._id });
@@ -167,7 +168,7 @@ const resolvers = {
   },
   Subscription: {
     bookAdded: {
-      subscribe: () => pubsub.asyncIterator("BOOK_ADDED"),
+      subscribe: () => pubsub.asyncIterableIterator("BOOK_ADDED"),
     },
   },
 };
