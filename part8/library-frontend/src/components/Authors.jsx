@@ -3,6 +3,10 @@ import { ALL_AUTHORS, EDIT_BORN } from "../queries";
 import { useState } from "react";
 import Select from "react-select";
 
+const padding = {
+  padding: 5,
+};
+
 const Authors = () => {
   const [born, setBorn] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
@@ -14,7 +18,7 @@ const Authors = () => {
   const result = useQuery(ALL_AUTHORS);
 
   if (result.loading) {
-    return <div>loading...</div>;
+    return <div style={padding}>loading...</div>;
   }
 
   const authors = result.data.allAuthors;

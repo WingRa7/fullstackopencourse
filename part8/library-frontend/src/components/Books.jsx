@@ -3,6 +3,10 @@ import { ALL_BOOKS } from "../queries";
 
 import { useState } from "react";
 
+const padding = {
+  padding: 5,
+};
+
 const Books = () => {
   const [genre, setGenre] = useState(null);
   const [getGenreBooks, { loading, error, data }] = useLazyQuery(ALL_BOOKS);
@@ -13,7 +17,7 @@ const Books = () => {
   if (error) return <p>error: {error}</p>;
 
   if (result.loading) {
-    return <div>loading...</div>;
+    return <div style={padding}>loading...</div>;
   }
 
   const books = result.data.allBooks;

@@ -90,6 +90,7 @@ const BOOK_DETAILS = gql`
       name
       born
     }
+    genres
   }
 `;
 

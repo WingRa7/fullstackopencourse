@@ -9,7 +9,7 @@ import LoginForm from "./components/LoginForm";
 import Notify from "./components/Notify";
 
 import { useApolloClient, useSubscription } from "@apollo/client";
-import { BOOK_ADDED } from "./queries";
+import { ALL_BOOKS, BOOK_ADDED } from "./queries";
 
 const padding = {
   padding: 5,
@@ -20,10 +20,31 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const client = useApolloClient();
 
+  const updateCache = (cache, query, addedBook) => {
+    cache.updateQuery(query, (cacheData) => {
+      const allBooks = cacheData ? cacheData.allBooks : [];
+
+      return { allBooks: allBooks.concat(addedBook) };
+    });
+  };
+
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
+    onData: ({ data, client }) => {
       window.alert(`Book Added`);
-      console.log(data.data.bookAdded);
+      const addedBook = data.data.bookAdded;
+      const addedBookGenres = data.data.bookAdded.genres;
+
+      // allGenres UpdateCache
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
+
+      // filteredGenres UpdateCache
+      addedBookGenres.forEach((genre) =>
+        updateCache(
+          client.cache,
+          { query: ALL_BOOKS, variables: { genre: genre } },
+          addedBook
+        )
+      );
     },
     onError: (error) => console.error("subsciption error", error),
   });
