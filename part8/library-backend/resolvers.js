@@ -47,9 +47,13 @@ const resolvers = {
     allAuthors: async () => Author.find({}),
   },
   Author: {
-    bookCount: async (root) => {
-      const booksByAuthor = await Book.countDocuments({ author: root._id });
-      return booksByAuthor;
+    bookCount: async (root, args, context) => {
+      const bookCountLoader = context.bookCountLoader;
+      const books = await bookCountLoader.load(root.id);
+      return books.length;
+      // previous n+1 problematic code - for reference
+      // const booksByAuthor = await Book.countDocuments({ author: root._id });
+      // return booksByAuthor;
     },
   },
   Mutation: {

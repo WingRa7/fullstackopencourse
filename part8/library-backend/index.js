@@ -5,6 +5,8 @@ const {
 } = require("@apollo/server/plugin/drainHttpServer");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 
+const DataLoader = require("dataloader");
+
 const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/use/ws");
 
@@ -15,6 +17,7 @@ const http = require("http");
 const jwt = require("jsonwebtoken");
 
 const User = require("./models/user");
+const Book = require("./models/book");
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -25,17 +28,31 @@ const resolvers = require("./resolvers");
 require("dotenv").config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
-
 console.log("connecting to", MONGODB_URI);
 
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log("connected to MongoDB");
+    mongoose.set("debug", true);
   })
   .catch((error) => {
     console.log("error connection to MongoDB:", error.message);
   });
+
+const batchAuthors = async (authorIds) => {
+  const books = await Book.find({
+    author: {
+      $in: authorIds,
+    },
+  });
+
+  return authorIds.map((authorId) => {
+    return books.filter(
+      (book) => book.author.toString() === authorId.toString()
+    );
+  });
+};
 
 const start = async () => {
   const app = express();
@@ -80,8 +97,14 @@ const start = async () => {
             process.env.JWT_SECRET
           );
           const currentUser = await User.findById(decodedToken.id);
-          return { currentUser };
+          return {
+            currentUser,
+            bookCountLoader: new DataLoader(batchAuthors),
+          };
         }
+        return {
+          bookCountLoader: new DataLoader(batchAuthors),
+        };
       },
     })
   );
