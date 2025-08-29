@@ -1,7 +1,31 @@
+interface HeightWeight {
+  height: number;
+  weight: number;
+}
+
+export const parseArguments = (args: string[]): HeightWeight => {
+  if (args.length < 4)
+    throw new Error("Not enough arguments (should be height(cm) / weight(kg)");
+  if (args.length > 4)
+    throw new Error("Too many arguments (should be height(cm) / weight(kg)");
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      height: Number(args[2]),
+      weight: Number(args[3]),
+    };
+  } else {
+    throw new Error("Provided values were not numbers!");
+  }
+};
+
 const calculateBmi = (heightcm: number, weightkg: number) => {
   const heightm = heightcm / 100;
+  console.log(heightcm);
   const heightsq = heightm * heightm;
+  console.log(heightsq);
   const bmi = weightkg / heightsq;
+  console.log(bmi);
 
   if (bmi < 16) {
     return "Underweight (Severe thinness)";
@@ -16,7 +40,7 @@ const calculateBmi = (heightcm: number, weightkg: number) => {
     return "Normal range";
   }
   if (bmi >= 25 && bmi < 30) {
-    return "Overwegiht (Pre-obese)";
+    return "Overweight (Pre-obese)";
   }
   if (bmi >= 30 && bmi < 35) {
     return "Overweight (Class I)";
@@ -25,8 +49,17 @@ const calculateBmi = (heightcm: number, weightkg: number) => {
     return "Overweight (Class II)";
   }
   if (bmi >= 40) {
-    return "Overweight (Class III";
+    return "Overweight (Class III)";
   }
 };
 
-console.log(calculateBmi(180, 74));
+try {
+  const { height, weight } = parseArguments(process.argv);
+  console.log("BMI:", calculateBmi(height, weight));
+} catch (error: unknown) {
+  let errorMessage = "An error occurred.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}

@@ -1,3 +1,5 @@
+import { isNotNumber, stringToNum } from "./utils";
+
 interface trainingResult {
   periodLength: number;
   trainingDays: number;
@@ -7,6 +9,29 @@ interface trainingResult {
   target: number;
   average: number;
 }
+
+interface argumentsParsed {
+  target: number;
+  exerciseHrs: number[];
+}
+
+export const parseArguments = (args: string[]): argumentsParsed => {
+  const argsStringArr = args.slice(2);
+
+  if (argsStringArr.length < 2) throw new Error("Not enough arguments");
+  if (argsStringArr.every((value) => isNotNumber(value))) {
+    throw new Error("Provided values were not numbers!");
+  }
+
+  const argsNumArr = argsStringArr.map((string: string) => stringToNum(string));
+  const target = argsNumArr[0];
+  const exerciseHrs = argsNumArr.slice(1);
+
+  return {
+    target: target,
+    exerciseHrs: exerciseHrs,
+  };
+};
 
 const calculateExercises = (
   exerciseHrs: number[],
@@ -69,7 +94,13 @@ const calculateExercises = (
   };
 };
 
-const exerciseHours = [3, 0, 2, 4.5, 0, 3, 1];
-const targetHours = 2;
-
-console.log(calculateExercises(exerciseHours, targetHours));
+try {
+  const { target, exerciseHrs } = parseArguments(process.argv);
+  console.log(calculateExercises(exerciseHrs, target));
+} catch (error: unknown) {
+  let errorMessage = "An error occurred.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
