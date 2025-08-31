@@ -19,13 +19,10 @@ export const parseArguments = (args: string[]): HeightWeight => {
   }
 };
 
-const calculateBmi = (heightcm: number, weightkg: number) => {
+export const calculateBmi = (heightcm: number, weightkg: number) => {
   const heightm = heightcm / 100;
-  console.log(heightcm);
   const heightsq = heightm * heightm;
-  console.log(heightsq);
   const bmi = weightkg / heightsq;
-  console.log(bmi);
 
   if (bmi < 16) {
     return "Underweight (Severe thinness)";
@@ -54,13 +51,15 @@ const calculateBmi = (heightcm: number, weightkg: number) => {
   return "BMI not found";
 };
 
-try {
-  const { height, weight } = parseArguments(process.argv);
-  console.log("BMI:", calculateBmi(height, weight));
-} catch (error: unknown) {
-  let errorMessage = "An error occurred.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (require.main === module) {
+  try {
+    const { height, weight } = parseArguments(process.argv);
+    console.log("BMI:", calculateBmi(height, weight));
+  } catch (error: unknown) {
+    let errorMessage = "An error occurred.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
