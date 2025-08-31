@@ -68,6 +68,7 @@ const calculateExercises = (
     if (percentage >= 80) {
       return 3;
     }
+    return 0;
   };
   const rating = calculateRating(averageHrs, target);
   const describeRating = (rating: number) => {
@@ -80,6 +81,7 @@ const calculateExercises = (
     if (rating === 3) {
       return "You did great. Well done! Keep it up.";
     }
+    return "Consistency is key";
   };
   const ratingFeedback = describeRating(rating);
 

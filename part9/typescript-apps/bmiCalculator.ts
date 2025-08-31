@@ -51,6 +51,7 @@ const calculateBmi = (heightcm: number, weightkg: number) => {
   if (bmi >= 40) {
     return "Overweight (Class III)";
   }
+  return "BMI not found";
 };
 
 try {
