@@ -19,7 +19,7 @@ export const parseArguments = (args: string[]): argumentsParsed => {
   const argsStringArr = args.slice(2);
 
   if (argsStringArr.length < 2) throw new Error("Not enough arguments");
-  if (argsStringArr.every((value) => isNotNumber(value))) {
+  if (argsStringArr.some((value) => isNotNumber(value))) {
     throw new Error("Provided values were not numbers!");
   }
 
@@ -33,7 +33,7 @@ export const parseArguments = (args: string[]): argumentsParsed => {
   };
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   exerciseHrs: number[],
   target: number
 ): trainingResult => {
@@ -96,13 +96,15 @@ const calculateExercises = (
   };
 };
 
-try {
-  const { target, exerciseHrs } = parseArguments(process.argv);
-  console.log(calculateExercises(exerciseHrs, target));
-} catch (error: unknown) {
-  let errorMessage = "An error occurred.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (require.main === module) {
+  try {
+    const { target, exerciseHrs } = parseArguments(process.argv);
+    console.log(calculateExercises(exerciseHrs, target));
+  } catch (error: unknown) {
+    let errorMessage = "An error occurred.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
