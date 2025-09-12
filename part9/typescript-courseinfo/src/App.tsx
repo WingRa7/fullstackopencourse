@@ -1,4 +1,9 @@
 const App = () => {
+  const padding = {
+    paddingTop: 4,
+    paddingBottom: 4,
+  };
+
   interface CoursePartBase {
     name: string;
     exerciseCount: number;
@@ -31,7 +36,7 @@ const App = () => {
     | CoursePartBasic
     | CoursePartGroup
     | CoursePartBackground
-    | Special;
+    | CoursePartSpecial;
 
   const courseName = "Half Stack application development";
   const courseParts: CoursePart[] = [
@@ -94,29 +99,48 @@ const App = () => {
     switch (part.kind) {
       case "basic":
         return (
-          <p>
-            {part.name} {part.exerciseCount} {part.description}
-          </p>
+          <div style={padding}>
+            <strong>
+              {part.name} {part.exerciseCount}
+            </strong>
+            <div>
+              <i>{part.description}</i>
+            </div>
+          </div>
         );
       case "group":
         return (
-          <p>
-            {part.name} {part.exerciseCount} {part.groupProjectCount}
-          </p>
+          <div style={padding}>
+            <strong>
+              {part.name} {part.exerciseCount}
+            </strong>
+
+            <div>project exercises {part.groupProjectCount}</div>
+          </div>
         );
       case "background":
         return (
-          <p>
-            {part.name} {part.exerciseCount} {part.description}
-            {part.backgroundMaterial}
-          </p>
+          <div style={padding}>
+            <strong>
+              {part.name} {part.exerciseCount}
+            </strong>
+            <div>
+              <i>{part.description}</i>
+            </div>
+            submit to {part.backgroundMaterial}
+          </div>
         );
       case "special":
         return (
-          <p>
-            {part.name} {part.exerciseCount} {part.description}
-            {part.requirements}
-          </p>
+          <div style={padding}>
+            <strong>
+              {part.name} {part.exerciseCount}
+            </strong>
+            <div>
+              <i>{part.description}</i>
+            </div>
+            required skils: {part.requirements.join(", ")}
+          </div>
         );
       default:
         return assertNever(part);
@@ -145,7 +169,11 @@ const App = () => {
   }
 
   const Total = (props: TotalProps) => {
-    return <p>Number of exercises {props.total}</p>;
+    return (
+      <div style={padding}>
+        <p>Number of exercises {props.total}</p>
+      </div>
+    );
   };
 
   return (
