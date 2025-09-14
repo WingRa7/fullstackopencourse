@@ -8,6 +8,7 @@ const App = () => {
   const [newWeather, setNewWeather] = useState("");
   const [newVisibility, setNewVisibility] = useState("");
   const [newComment, setNewComment] = useState("");
+  const [notify, setNotify] = useState<string | null>(null);
 
   useEffect(() => {
     getAllDiaryEntries().then((data) => {
@@ -15,26 +16,36 @@ const App = () => {
     });
   }, []);
 
-  const diaryCreation = (event: React.SyntheticEvent) => {
+  const diaryCreation = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    createDiary({
-      date: newDate,
-      weather: newWeather,
-      visibility: newVisibility,
-      comment: newComment,
-    }).then((data) => {
-      setDiaries(diaries.concat(data));
-    });
 
-    setNewDate("");
-    setNewWeather("");
-    setNewVisibility("");
-    setNewComment("");
+    try {
+      const response = await createDiary({
+        date: newDate,
+        weather: newWeather,
+        visibility: newVisibility,
+        comment: newComment,
+      });
+      setDiaries(diaries.concat(response));
+      setNewDate("");
+      setNewWeather("");
+      setNewVisibility("");
+      setNewComment("");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setNotify(error.message);
+        setTimeout(() => {
+          setNotify(null);
+        }, 5000);
+        console.log(error);
+      }
+    }
   };
 
   return (
     <div>
       <h1>Add new entry</h1>
+      <p style={{ color: "red" }}>{notify}</p>
       <form onSubmit={diaryCreation}>
         <div>
           date
