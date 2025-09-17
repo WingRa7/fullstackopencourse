@@ -21,14 +21,35 @@ const PatientInfoPage = () => {
   }, [id]);
 
   if (patient) {
+    console.log(patient.entries);
+
     return (
       <div style={{ marginTop: "1em" }}>
-        <h2>
-          {patient?.name} {patient.gender === "male" && <Mars />}
-          {patient.gender === "female" && <Venus />}
-        </h2>
-        <p>ssh: {patient?.ssn}</p>
-        <p>occupation: {patient?.occupation}</p>
+        <div>
+          <h2>
+            {patient?.name} {patient.gender === "male" && <Mars />}
+            {patient.gender === "female" && <Venus />}
+          </h2>
+          <p>ssh: {patient?.ssn}</p>
+          <p>occupation: {patient?.occupation}</p>
+        </div>
+        <div>
+          <h2>entries</h2>
+          {patient.entries.map((entry) => {
+            return (
+              <div key={entry.id}>
+                <p>
+                  {entry.date} <i>{entry.description}</i>
+                </p>
+                <ul>
+                  {entry.diagnosisCodes?.map((code) => {
+                    return <li key={code}>{code}</li>;
+                  })}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
