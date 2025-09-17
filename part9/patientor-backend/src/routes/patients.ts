@@ -4,20 +4,16 @@ import express from "express";
 import { Request, Response, NextFunction } from "express";
 
 import patientService from "../services/patientService";
-import {
-  NewPatientEntry,
-  NonSensitivePatientEntry,
-  PatientEntry,
-} from "../types";
+import { NewPatient, NonSensitivePatient, Patient } from "../types";
 import { NewEntrySchema } from "../utils";
 
 const router = express.Router();
 
-router.get("/", (_req, res: Response<NonSensitivePatientEntry[]>) => {
+router.get("/", (_req, res: Response<NonSensitivePatient[]>) => {
   res.send(patientService.getNonSensitiveEntries());
 });
 
-router.get("/:id", (req, res: Response<PatientEntry>) => {
+router.get("/:id", (req, res: Response<Patient>) => {
   const patient = patientService.findById(req.params.id);
 
   if (patient) {
@@ -53,10 +49,7 @@ const errorMiddleware = (
 router.post(
   "/",
   newPatientParser,
-  (
-    req: Request<unknown, unknown, NewPatientEntry>,
-    res: Response<PatientEntry>
-  ) => {
+  (req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
     const addedEntry = patientService.addPatient(req.body);
     res.json(addedEntry);
   }
