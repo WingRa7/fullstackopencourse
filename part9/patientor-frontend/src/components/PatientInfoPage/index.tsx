@@ -1,10 +1,14 @@
-import { Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 import { Mars, Venus } from "lucide-react";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
 import { useEffect, useState } from "react";
 
-const PatientInfoPage = () => {
+interface Props {
+  diagnoses: Diagnosis[];
+}
+
+const PatientInfoPage = ({ diagnoses }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
 
   const params = useParams();
@@ -20,9 +24,15 @@ const PatientInfoPage = () => {
     }
   }, [id]);
 
-  if (patient) {
-    console.log(patient.entries);
+  const findDiagnosis = (code: string): string | null => {
+    const diagnosis = diagnoses.find((diagnosis) => code === diagnosis.code);
+    if (diagnosis) {
+      return diagnosis.name;
+    }
+    return null;
+  };
 
+  if (patient) {
     return (
       <div style={{ marginTop: "1em" }}>
         <div>
@@ -43,7 +53,11 @@ const PatientInfoPage = () => {
                 </p>
                 <ul>
                   {entry.diagnosisCodes?.map((code) => {
-                    return <li key={code}>{code}</li>;
+                    return (
+                      <li key={code}>
+                        {code} {findDiagnosis(code)}
+                      </li>
+                    );
                   })}
                 </ul>
               </div>
