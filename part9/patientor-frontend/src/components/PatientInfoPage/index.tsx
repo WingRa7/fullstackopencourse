@@ -19,7 +19,12 @@ import {
   HeartOff,
 } from "lucide-react";
 import { Button } from "@mui/material";
-import { useParams, Link } from "react-router-dom";
+
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import AddEntryModal from "../AddEntryModal";
+import { EntryFormValues } from "../../types";
+
 import patientService from "../../services/patients";
 import { useEffect, useState } from "react";
 
@@ -36,12 +41,25 @@ const padding = {
   paddingRight: 2,
 };
 
+interface errorResponse {
+  error: { message: string }[];
+}
+
 interface PatientInfoProps {
   diagnoses: Diagnosis[];
 }
 
 const PatientInfoPage = ({ diagnoses }: PatientInfoProps) => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
   const [patient, setPatient] = useState<Patient | null>(null);
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
 
   const params = useParams();
   const id = params.id;
@@ -55,6 +73,39 @@ const PatientInfoPage = ({ diagnoses }: PatientInfoProps) => {
       void fetchPatient();
     }
   }, [id]);
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      if (id) {
+        const entry = await patientService.createEntry(id, values);
+        if (patient) {
+          setPatient({
+            ...patient,
+            entries: patient?.entries.concat(entry),
+          });
+        }
+        setModalOpen(false);
+      }
+    } catch (e: unknown) {
+      console.log("error response:", e);
+
+      if (axios.isAxiosError(e)) {
+        if (
+          (e?.response?.data as errorResponse) &&
+          typeof e?.response?.data.error[0].message === "string"
+        ) {
+          const message = e.response.data.error[0].message;
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
 
   const findDiagnosis = (code: string): string | null => {
     const diagnosis = diagnoses.find((diagnosis) => code === diagnosis.code);
@@ -210,8 +261,8 @@ const PatientInfoPage = ({ diagnoses }: PatientInfoProps) => {
           <h2>entries</h2>
           {patient.entries.map((entry) => {
             return (
-              <div style={infoStyle}>
-                <EntryDetails key={entry.id} entry={entry} />
+              <div key={entry.id} style={infoStyle}>
+                <EntryDetails entry={entry} />
                 <ul>
                   {entry.diagnosisCodes?.map((code) => {
                     return (
@@ -225,7 +276,14 @@ const PatientInfoPage = ({ diagnoses }: PatientInfoProps) => {
             );
           })}
         </div>
-        <Button component={Link} to="/" variant="contained" color="primary">
+        <AddEntryModal
+          modalOpen={modalOpen}
+          onSubmit={submitNewEntry}
+          error={error}
+          onClose={closeModal}
+          diagnoses={diagnoses}
+        />
+        <Button variant="contained" onClick={() => openModal()}>
           Add New Entry
         </Button>
       </div>
